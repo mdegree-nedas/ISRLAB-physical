@@ -15,9 +15,10 @@ class Translater(Node):
         super().__init__("translater")
         self.redis = RedisWrapper()
         self.sub = self.create_subscription(String, ROS2_TOPIC, self.listener_callback, 10)
+        self.get_logger().info("Translater online")
 
     def listener_callback(self, msg):
-        self.get_logger().info("Forward message '{}' to redis topic {}".format(msg.data, REDIS_TOPIC))
+        self.get_logger().info("Forward message '{}' from ros2 topic '{}' to redis topic '{}'".format(msg.data, ROS2_TOPIC, REDIS_TOPIC))
         self.redis.publish(REDIS_TOPIC, msg.data)
         
 

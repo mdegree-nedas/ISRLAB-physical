@@ -1,6 +1,6 @@
 import redis
 
-SERVER_ADDR = "0.0.0.0"
+SERVER_ADDR = "redis_server"
 SERVER_PORT = 6379
 DB = 0
 
