@@ -4,9 +4,9 @@ DEFAULT := all
 
 all: clean build
 
-build:
+build: $(REQFILE)
 	$(VENV) $(ENVNAME) 
-	. $(ENV) && $(PIPINSTALL) -r requirements.txt
+	. $(ENV) && $(PIPINSTALL) -r $(REQFILE)
 
 clean:
 	rm -rf $(ENVNAME)
