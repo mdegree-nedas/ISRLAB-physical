@@ -10,6 +10,7 @@ build: $(REQFILE)
 
 clean:
 	rm -rf $(ENVNAME)
+	rm -rf __pycache__
 
 
 .PHONY: build clean
