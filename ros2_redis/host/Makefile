@@ -12,5 +12,8 @@ clean:
 	rm -rf $(ENVNAME)
 	rm -rf __pycache__
 
+start: $(ENV) $(MAIN)
+	. $(ENV) && $(PYTHON) $(MAIN)
 
-.PHONY: build clean
+
+.PHONY: build clean start
