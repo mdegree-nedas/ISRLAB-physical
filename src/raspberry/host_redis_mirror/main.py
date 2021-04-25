@@ -1,10 +1,11 @@
-from RedisWrapper import RedisWrapper
 import time
+
+from redis_wrapper import RedisWrapper
 
 
 def main():
-    redisWrapper = RedisWrapper()
-    subscriber_obj = redisWrapper.subscriber_obj()
+    redis_wrapper = RedisWrapper()
+    subscriber_obj = redis_wrapper.subscriber_obj()
     subscriber_obj.subscribe('to_redis')
 
     print("Hearing messages from ROS2...")

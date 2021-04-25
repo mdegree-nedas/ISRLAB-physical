@@ -22,6 +22,6 @@ class RedisWrapper:
         return self.r.publish(channel_name, data)
 
 if __name__ == '__main__':
-    redisWrapper = RedisWrapper()
-    redisWrapper.set('test', 'value_test')
-    print('test: ' + str(redisWrapper.get('test')))
+    redis_wrapper = RedisWrapper()
+    redis_wrapper.set('test', 'value_test')
+    print('test: ' + str(redis_wrapper.get('test')))
