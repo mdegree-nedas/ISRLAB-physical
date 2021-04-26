@@ -14,6 +14,7 @@ def main():
         if message['type'] == 'message':
             data = message['data'].decode('utf-8')
             print("Heard: " + data)
+            redis_wrapper.publish("from_redis", "I heard it (from HOST)")
 
 if __name__ == '__main__':
     main()
