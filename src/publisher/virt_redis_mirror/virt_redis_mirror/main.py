@@ -33,6 +33,7 @@ class Translater(Node):
         for message in subscriber_obj.listen():
             if message['type'] == 'message':
                 data = message['data'].decode('utf-8')
+                self.get_logger().info("Forward message '{}' from redis topic '{}' to ros2 topic '{}'".format(data, FROM_REDIS_TOPIC, TO_ROS2_TOPIC))
                 msg = String()
                 msg.data = "Heard: {}".format(data)
                 self.pub.publish(msg)
