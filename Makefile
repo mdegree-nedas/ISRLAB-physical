@@ -11,13 +11,13 @@ h_build: h_init h_install
 
 .PHONY: h_init
 h_init:
-	python -m venv $(HOST_REDIS_MIRROR_PATH)
+	python3 -m venv $(HOST_REDIS_MIRROR_PATH)
 
 .ONESHELL:
 .PHONY: h_install
 h_install:
 	. $(HOST_REDIS_MIRROR_PATH)/bin/activate
-	python -m pip install --upgrade pip
+	python3 -m pip install --upgrade pip
 	pip install -r $(HOST_REDIS_MIRROR_PATH)/requirements.txt
 
 .ONESHELL:
