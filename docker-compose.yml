@@ -1,6 +1,6 @@
 version: '3'
 services:
-    redis_server:
+    redis:
         image: redis:6.2.2-buster
         ports:
             - "6379:6379"
@@ -10,4 +10,4 @@ services:
         volumes:
             - ./src/publisher:/root/workspace
         depends_on:
-            - redis_server
+            - redis
