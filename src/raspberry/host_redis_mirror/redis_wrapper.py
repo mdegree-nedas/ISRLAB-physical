@@ -1,12 +1,11 @@
 import redis
 
-SERVER_ADDR = "0.0.0.0"
-SERVER_PORT = 6379
-DB = 0
+import common as Common
+
 
 class RedisWrapper:
-    def __init__(self, host=SERVER_ADDR, port=SERVER_PORT, db=DB):
-        self.r = redis.Redis(host=SERVER_ADDR, port=SERVER_PORT, db=DB)
+    def __init__(self, host=Common.SERVER_ADDR, port=Common.SERVER_PORT, db=Common.DB):
+        self.r = redis.Redis(host=host, port=port, db=db)
         self.p = self.r.pubsub()
 
     def set(self, key, value):
@@ -20,8 +19,3 @@ class RedisWrapper:
 
     def publish(self, channel_name, data):
         return self.r.publish(channel_name, data)
-
-if __name__ == '__main__':
-    redis_wrapper = RedisWrapper()
-    redis_wrapper.set('test', 'value_test')
-    print('test: ' + str(redis_wrapper.get('test')))
