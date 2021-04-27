@@ -1,7 +1,7 @@
 version: '3'
 services:
     redis_server:
-        image: redis:6.2.2
+        image: redis:6.2.2-buster
         ports:
             - "6379:6379"
 
