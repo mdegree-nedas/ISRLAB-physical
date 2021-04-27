@@ -1,14 +1,11 @@
 import redis
 
-
-SERVER_ADDR = "redis_server"
-SERVER_PORT = 6379
-DB = 0
+import virt_redis_mirror.common as Common
 
 
 class RedisWrapper:
-    def __init__(self, host=SERVER_ADDR, port=SERVER_PORT, db=DB):
-        self.r = redis.Redis(host=SERVER_ADDR, port=SERVER_PORT, db=DB)
+    def __init__(self, host=Common.SERVER_ADDR, port=Common.SERVER_PORT, db=Common.DB):
+        self.r = redis.Redis(host=host, port=port, db=db)
         self.p = self.r.pubsub()
 
     def set(self, key, value):

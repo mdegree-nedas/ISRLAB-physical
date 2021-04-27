@@ -3,7 +3,7 @@ from rclpy.node import Node
 
 from std_msgs.msg import String
 
-from virt_redis_mirror.RedisWrapper import RedisWrapper
+from virt_redis_mirror.redis_wrapper import RedisWrapper
 import threading
 
 
@@ -22,10 +22,12 @@ class Translater(Node):
         self.redis_listener = threading.Thread(target=self.redis_topic_listener)
         self.get_logger().info("Translater online")
 
+    # ROS2 topic -> REDIS topic
     def ros2_listener_callback(self, msg):
         self.get_logger().info("Forward message '{}' from ros2 topic '{}' to redis topic '{}'".format(msg.data, FROM_ROS2_TOPIC, TO_REDIS_TOPIC))
         self.redis.publish(TO_REDIS_TOPIC, msg.data)
 
+    # REDIS topic -> ROS2 topic
     def redis_topic_listener(self):
         subscriber_obj = self.redis.subscriber_obj()
         subscriber_obj.subscribe(FROM_REDIS_TOPIC)
