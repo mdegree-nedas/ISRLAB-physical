@@ -25,7 +25,6 @@ v_init: v_check
 .SILENT:
 .PHONY: v_down
 v_down: v_check
-	sudo $(DOCKER_COMPOSE_X) down
 	echo "PRUNE all docker env objects"
 	sudo docker system prune -f
 	echo "RM $(PUBLISHER_IMG):latest docker image"
@@ -49,11 +48,6 @@ v_clean:
 	fi
 	echo "DIR $(PUBLISHER_SRC)/build removed"
 	
-	if [ -d "$(PUBLISHER_SRC)/src/virt_redis_mirror/virt_redis_mirror/__pycache__" ]; then \
-		sudo rm -rf "$(PUBLISHER_SRC)/src/virt_redis_mirror/virt_redis_mirror/__pycache__"; \
-	fi
-	echo "DIR $(PUBLISHER_SRC)/src/virt_redis_mirror/virt_redis_mirror/__pycache__ removed"
-
 .PHONY: h_init
 h_init:
 	$(PYTHON_X) -m venv $(HOST_REDIS_MIRROR_PATH)
@@ -78,7 +72,6 @@ h_clean:
 	-rm -rf $(HOST_REDIS_MIRROR_PATH)/lib
 	-rm -rf $(HOST_REDIS_MIRROR_PATH)/lib64
 	-rm -f $(HOST_REDIS_MIRROR_PATH)/pyvenv.cfg
-	
 	-rm -rf $(HOST_REDIS_MIRROR_PATH)/__pycache__
 	-rm -rf $(HOST_REDIS_MIRROR_PATH)/share
 

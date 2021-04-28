@@ -1,0 +1,11 @@
+publisher/build
+publisher/install
+publisher/log
+
+raspberry/host_redis_mirror/ bin
+raspberry/host_redis_mirror/include
+raspberry/host_redis_mirror/lib
+raspberry/host_redis_mirror/lib64
+raspberry/host_redis_mirror/pyvenv.cfg
+
+__pycache__
