@@ -48,10 +48,10 @@ v_clean:
 	fi
 	echo "DIR $(PUBLISHER_SRC)/build removed"
 	
-	if [ -d "$(PUBLISHER_SRC)/virt_redis_mirror/virt_redis_mirror/__pycache__" ]; then \
-		sudo rm -rf "$(PUBLISHER_SRC)/virt_redis_mirror/virt_redis_mirror/__pycache__"; \
+	if [ -d "$(PUBLISHER_SRC)/src/virt_redis_mirror/virt_redis_mirror/__pycache__" ]; then \
+		sudo rm -rf "$(PUBLISHER_SRC)/src/virt_redis_mirror/virt_redis_mirror/__pycache__"; \
 	fi
-	echo "DIR $(PUBLISHER_SRC)/virt_redis_mirror/virt_redis_mirror/__pycache__ removed"
+	echo "DIR $(PUBLISHER_SRC)/src/virt_redis_mirror/virt_redis_mirror/__pycache__ removed"
 
 .PHONY: h_init
 h_init:
