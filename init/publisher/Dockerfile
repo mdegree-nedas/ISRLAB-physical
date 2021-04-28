@@ -15,4 +15,5 @@ CMD cd /root/workspace && \
 	sleep 10 && \
 	(ros2 run virt_redis_mirror main &) && \
 	sleep 5 && \
-	ros2 topic pub /from_ros2 std_msgs/msg/String "{data : 'Hello from ROS2 CLI'}"
+        ros2 run publisher main
+	#ros2 topic pub /from_ros2 std_msgs/msg/String "{data : 'Hello from ROS2 CLI'}"
