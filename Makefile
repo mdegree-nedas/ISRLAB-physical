@@ -47,6 +47,11 @@ v_clean:
 		sudo rm -rf "$(PUBLISHER_SRC)/build"; \
 	fi
 	echo "DIR $(PUBLISHER_SRC)/build removed"
+	
+	if [ -d "$(PUBLISHER_SRC)/virt_redis_mirror/virt_redis_mirror/__pycache__" ]; then \
+		sudo rm -rf "$(PUBLISHER_SRC)/virt_redis_mirror/virt_redis_mirror/__pycache__"; \
+	fi
+	echo "DIR $(PUBLISHER_SRC)/virt_redis_mirror/virt_redis_mirror/__pycache__ removed"
 
 .PHONY: h_init
 h_init:
