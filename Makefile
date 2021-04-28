@@ -25,6 +25,7 @@ v_init: v_check
 .SILENT:
 .PHONY: v_down
 v_down: v_check
+	sudo $(DOCKER_COMPOSE_X) down
 	echo "PRUNE all docker env objects"
 	sudo docker system prune -f
 	echo "RM $(PUBLISHER_IMG):latest docker image"
