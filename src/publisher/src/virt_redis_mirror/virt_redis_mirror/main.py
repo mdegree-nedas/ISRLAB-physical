@@ -2,12 +2,14 @@ import rclpy
 from rclpy.node import Node
 
 from std_msgs.msg import String
+from geometry_msgs.msg import Twist
 
 from virt_redis_mirror.redis_wrapper import RedisWrapper
+#from virt_redis_mirror.datatypes.Move import Move
 import threading
 
 
-FROM_ROS2_TOPIC = 'from_ros2'
+FROM_ROS2_TOPIC = 'cmd_vel'
 TO_ROS2_TOPIC = 'to_ros2'
 TO_REDIS_TOPIC = 'to_redis'
 FROM_REDIS_TOPIC = 'from_redis'
@@ -17,15 +19,17 @@ class Translater(Node):
     def __init__(self):
         super().__init__("translater")
         self.redis = RedisWrapper()
-        self.sub = self.create_subscription(String, FROM_ROS2_TOPIC, self.ros2_listener_callback, 10)
+        # ROS2 topic -> REDIS topic
+        self.sub = self.create_subscription(Twist, FROM_ROS2_TOPIC, self.ros2_listener_callback, 10)
+        # REDIS topic -> ROS2 topic
         self.pub = self.create_publisher(String, TO_ROS2_TOPIC, 10)
         self.redis_listener = threading.Thread(target=self.redis_topic_listener)
         self.get_logger().info("Translater online")
 
     # ROS2 topic -> REDIS topic
     def ros2_listener_callback(self, msg):
-        self.get_logger().info("Forward message '{}' from ros2 topic '{}' to redis topic '{}'".format(msg.data, FROM_ROS2_TOPIC, TO_REDIS_TOPIC))
-        self.redis.publish(TO_REDIS_TOPIC, msg.data)
+        self.get_logger().info("Forward message '{}' from ros2 topic '{}' to redis topic '{}'".format(str(msg), FROM_ROS2_TOPIC, TO_REDIS_TOPIC))
+        self.redis.publish(TO_REDIS_TOPIC, str(msg))
 
     # REDIS topic -> ROS2 topic
     def redis_topic_listener(self):
@@ -42,6 +46,9 @@ class Translater(Node):
 
     def start_redis_listener(self):
         self.redis_listener.start()
+
+    #def __from_twist_to_move(self, twist_msg):
+    #    pass
 
 
 def main(args=None):
