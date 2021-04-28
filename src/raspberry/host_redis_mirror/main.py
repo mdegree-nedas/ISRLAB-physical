@@ -1,4 +1,5 @@
 import time
+import json
 
 from redis_wrapper import RedisWrapper
 
@@ -12,9 +13,12 @@ def main():
 
     for message in subscriber_obj.listen():
         if message['type'] == 'message':
-            data = message['data'].decode('utf-8')
-            print("Heard: " + data)
+            data = from_json_to_dict(message['data'].decode('utf-8'))
+            print("Heard: " + str(data))
             redis_wrapper.publish("from_redis", "I heard it (from HOST)")
+
+def from_json_to_dict(dict_str):
+    return json.loads(dict_str)
 
 if __name__ == '__main__':
     main()
