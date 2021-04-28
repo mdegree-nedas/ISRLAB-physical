@@ -27,10 +27,10 @@ v_init: v_check
 v_down: v_check
 	echo "PRUNE all docker env objects"
 	sudo docker system prune -f
-	echo "RM $(PUBLISHER_IMG):redis docker image"
+	echo "RM $(PUBLISHER_IMG):latest docker image"
 	sudo docker image ls | grep -i "$(PUBLISHER_IMG)" && \
-		sudo docker rmi $(PUBLISHER_IMG):redis || \
-		echo "image $(PUBLISHER_IMG):redis not found"
+		sudo docker rmi $(PUBLISHER_IMG):latest || \
+		echo "image $(PUBLISHER_IMG):latest not found"
 
 .SILENT:
 .PHONY: v_clean
@@ -72,6 +72,9 @@ h_clean:
 	-rm -rf $(HOST_REDIS_MIRROR_PATH)/lib
 	-rm -rf $(HOST_REDIS_MIRROR_PATH)/lib64
 	-rm -f $(HOST_REDIS_MIRROR_PATH)/pyvenv.cfg
+	
+	-rm -rf $(HOST_REDIS_MIRROR_PATH)/__pycache__
+	-rm -rf $(HOST_REDIS_MIRROR_PATH)/share
 
 .SILENT:
 .PHONY: help
