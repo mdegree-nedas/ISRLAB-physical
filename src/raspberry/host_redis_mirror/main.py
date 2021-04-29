@@ -1,5 +1,5 @@
 import time
-import json
+import yaml
 
 from redis_wrapper import RedisWrapper
 
@@ -13,12 +13,12 @@ def main():
 
     for message in subscriber_obj.listen():
         if message['type'] == 'message':
-            data = from_json_to_dict(message['data'].decode('utf-8'))
+            data = from_yaml_to_dict(message['data'].decode('utf-8'))
             print("Heard: " + str(data))
             redis_wrapper.publish("from_redis", "I heard it (from HOST)")
 
-def from_json_to_dict(dict_str):
-    return json.loads(dict_str)
+def from_yaml_to_dict(yaml_str):
+    return yaml.load(yaml_str)
 
 if __name__ == '__main__':
     main()
