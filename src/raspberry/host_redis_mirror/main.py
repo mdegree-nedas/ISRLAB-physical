@@ -18,7 +18,7 @@ def main():
             redis_wrapper.publish("from_redis", "I heard it (from HOST)")
 
 def from_yaml_to_dict(yaml_str):
-    return yaml.load(yaml_str)
+    return yaml.load(yaml_str, Loader=yaml.FullLoader)
 
 if __name__ == '__main__':
     main()
