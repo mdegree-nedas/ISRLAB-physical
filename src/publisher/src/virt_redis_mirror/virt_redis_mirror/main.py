@@ -3,8 +3,7 @@ from rclpy.node import Node
 
 from std_msgs.msg import String
 from geometry_msgs.msg import Twist
-from rosidl_runtime_py import message_to_ordereddict
-import json
+from rosidl_runtime_py import message_to_yaml
 
 from virt_redis_mirror.redis_wrapper import RedisWrapper
 import threading
@@ -29,7 +28,7 @@ class Translater(Node):
 
     # ROS2 topic -> REDIS topic
     def ros2_listener_callback(self, msg):
-        data = self.__from_twist_to_json(msg)
+        data = self.__from_twist_to_yaml(msg)
         self.get_logger().info("Forward message '{}' from ros2 topic '{}' to redis topic '{}'".format(data, FROM_ROS2_TOPIC, TO_REDIS_TOPIC))
         self.redis.publish(TO_REDIS_TOPIC, data)
 
@@ -49,8 +48,8 @@ class Translater(Node):
     def start_redis_listener(self):
         self.redis_listener.start()
 
-    def __from_twist_to_json(self, twist_msg):
-        return json.dumps(message_to_ordereddict(twist_msg))
+    def __from_twist_to_yaml(self, twist_msg):
+        return message_to_yaml(twist_msg)
 
 
 def main(args=None):
