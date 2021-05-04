@@ -12,9 +12,9 @@
 turlebot.go_back()
 ```
 
-##### [ros2 container] rosidl conversion module
+##### [ros2 container] rosidl_runtime_py conversion module
 
-###### (step 1) ros2 custom interface -> python collections.OrderedDict)
+###### (step 1) ros2 custom interface -> python collections.OrderedDict
 
 ```
 geometry_msgs.msg.Twist(linear=geometry_msgs.msg.Vector3(x=-0.1, y=0.0, z=0.0), angular=geometry_msgs.msg.Vector3(x=0.0, y=0.0, z=0.0))
@@ -24,7 +24,7 @@ geometry_msgs.msg.Twist(linear=geometry_msgs.msg.Vector3(x=-0.1, y=0.0, z=0.0), 
 OrderedDict([('linear', OrderedDict([('x', -0.1), ('y', 0.0), ('z', 0.0)])), ('angular', OrderedDict([('x', 0.0), ('y', 0.0), ('z', 0.0)]))])
 ```
 
-###### (step 2) python collections.OrderedDict -> json)
+###### (step 2) python collections.OrderedDict -> json
 
 ```python
 OrderedDict([('linear', OrderedDict([('x', -0.1), ('y', 0.0), ('z', 0.0)])), ('angular', OrderedDict([('x', 0.0), ('y', 0.0), ('z', 0.0)]))])
