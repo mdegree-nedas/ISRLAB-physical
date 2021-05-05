@@ -1,0 +1,51 @@
+name: "freenove_4WD_smart_car"
+  sensors:
+    ultrasound:
+      id: 'ultrasound_id'
+      type: 'vector'
+      address: 'ultrasound_address'
+      data: 
+    lightsensor:
+      id: 'lightsensor_id'
+      type: 'vector'
+      address: 'lightsensor_address'
+      data:
+    linetracker:
+      id: 'linetracker'
+      type: 'vector'
+      address: 'linetracker_address'
+      data:
+  actuators:
+    motion:
+      id: 'motion_id'
+      address: 'motion_address'
+      commands: 
+        - go_forward
+        - go_backward
+        - turn_left
+        - turn_right
+    led:
+      id: 'led_id'
+      address: 'led_address'
+      commands: 
+        - 'switch_on'
+        - 'switch_off'
+  commands:
+    go_forward:
+      data:
+      time:
+    go_backward:
+      data:
+      time:
+    turn_left:
+      data:
+      time:
+    turn_right:
+      data:
+      time:
+    switch_on:
+      data:
+      time:
+    switch_off:
+      data:
+      time:
