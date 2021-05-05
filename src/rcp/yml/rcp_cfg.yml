@@ -1,4 +1,4 @@
-name: "freenove_4WD_smart_car"
+freenove_4WD_smart_car:
   sensors:
     ultrasound:
       id: 'ultrasound_id'
