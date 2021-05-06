@@ -4,7 +4,7 @@ freenove_4WD_smart_car:
       id: 'ultrasound_id'
       type: 'vector'
       address: 'ultrasound_address'
-      data: 
+      data:
     lightsensor:
       id: 'lightsensor_id'
       type: 'vector'
@@ -19,7 +19,7 @@ freenove_4WD_smart_car:
     motion:
       id: 'motion_id'
       address: 'motion_address'
-      commands: 
+      commands:
         - go_forward
         - go_backward
         - turn_left
@@ -27,7 +27,7 @@ freenove_4WD_smart_car:
     led:
       id: 'led_id'
       address: 'led_address'
-      commands: 
+      commands:
         - 'switch_on'
         - 'switch_off'
   commands:

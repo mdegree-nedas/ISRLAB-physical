@@ -9,8 +9,9 @@ def _file_reader(file_name):
     :param file_name: The file's name
     :return: Yaml string
     """
-    with open(file_name, 'r') as yaml_file:
+    with open(file_name, "r") as yaml_file:
         return yaml_file.read()
+
 
 # yaml string -> dict
 def _yaml_converter(yaml_str):
@@ -21,6 +22,7 @@ def _yaml_converter(yaml_str):
     :return: dict representation of yaml_str
     """
     return yaml.load(yaml_str, Loader=yaml.FullLoader)
+
 
 # dict fields follow the rules?
 def _rule_checker(robot):
@@ -46,5 +48,5 @@ def parse_robot_structure(file_name):
 
     if not _rule_checker(obj):
         raise Exception("The yaml robot structure doesn't follow the rules")
-    
+
     return obj
