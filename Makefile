@@ -9,17 +9,19 @@ r_build: r_init r_install
 v_build: v_rm v_init
 v_rm: v_down v_clean
 
-.PHONY: all # ----- (combo)[host,ros,rcp] build all
-.PHONY: rm # ----- (combo)[host,ros,rcp] rm all
 .PHONY: host # ----- (combo)[host] build
 .PHONY: ros # ----- (combo)[ros] build
 .PHONY: rcp # ----- (combo)[rcp] build
 
-all: h_build v_build
-rm: h_clean v_rm
 host: h_build
 ros: v_build
 rcp: r_build
+
+.PHONY: all # ----- (combo)[host,ros,rcp] build all
+.PHONY: rm # ----- (combo)[host,ros,rcp] rm all
+
+all: host ros rcp
+rm: h_clean r_clean v_rm
 
 # --------------------------------------------------
 # HELP

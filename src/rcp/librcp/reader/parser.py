@@ -1,5 +1,5 @@
-from core.parser.syntax.syntax import Syntax
-from core.parser.structure.structure import Structure
+from librcp.reader.syntax import Syntax
+from librcp.reader.structure import Structure
 
 
 class Parser:
