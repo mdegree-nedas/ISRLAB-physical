@@ -7,8 +7,8 @@ def main():
     rcp = Rcp()
     for yml_arg in yml_args:
         yml_src = rcp.parser.syntax.yaml_parse_file(yml_arg)
-        cfg_src = rcp.parser.syntax.yaml_to_dict(yml_src)
-        print(rcp.parser.structure.cfg_validate(cfg_src))
+        cfg_dict = rcp.parser.syntax.yaml_to_dict(yml_src)
+        rcp.parser.structure.cfg_validate(cfg_dict)
 
 
 if __name__ == "__main__":
