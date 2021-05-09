@@ -3,6 +3,9 @@ from itertools import chain
 
 class Structure:
     def __init__(self):
+        self._initialize()
+
+    def _initialize(self):
         self._cfg_default_classes = ["sensors", "actuators", "commands"]
         self._cfg_default_sensors_fields = ["id", "type", "address", "data"]
         self._cfg_default_actuators_fields = ["id", "address", "commands"]
@@ -19,6 +22,7 @@ class Structure:
         self._cfg_vector_commands_fields = []
 
     def cfg_validate(self, cfg_dict):
+        self._initialize()
         self._cfg_vector_name = list(cfg_dict.keys())
         assert len(self._cfg_vector_name) == 1
         name_k = self._cfg_vector_name[0]
