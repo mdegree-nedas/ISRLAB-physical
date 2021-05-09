@@ -66,3 +66,13 @@ class Structure:
             )
             assert len(self._cfg_vector_commands_fields) == 2
             assert self._cfg_vector_commands_fields == self._cfg_default_commands_fields
+
+        return [
+            name_k,
+            sensors_k,
+            self._cfg_vector_sensors,
+            actuators_k,
+            self._cfg_vector_actuators,
+            commands_k,
+            self._cfg_vector_commands,
+        ]
