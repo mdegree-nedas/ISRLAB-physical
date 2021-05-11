@@ -62,6 +62,8 @@ class Generator:
     def generate(self, cfg_dict, cfg_parse):
         self._initialize(cfg_dict, cfg_parse)
 
+        self._gen_imports()
+
         self._gen_main_class()
         self._gen_main_class__init__()
         # maybe other calls
@@ -81,6 +83,19 @@ class Generator:
             self._gen_actuators_inner_class_commands(actuator)
             self._gen_actuators_inner_class_commands_def(actuator)
         # other calls
+
+    # ##################################################
+    # GEN MAIN CLASS
+
+    def _gen_imports(self):
+        payload = [
+            "from types import FunctionType" + self._nl,
+            self._nl,
+        ]
+
+        f = open(self._filename, "a")
+        f.writelines(payload)
+        f.close()
 
     # ##################################################
     # GEN MAIN CLASS
@@ -232,8 +247,22 @@ class Generator:
         for cmd in self._cfg_dict[self._gen_name_k][self._gen_actuators_k][actuator][
             "commands"
         ]:
-            payload = [self._tab + "def " + cmd + "(self):" + self._nl]
-            payload.append(self._2tab + "pass" + self._nl)
+            payload = [self._tab + "def " + cmd + "(self, _callback=None):" + self._nl]
+            payload.append(self._2tab + "if _callback == None:" + self._nl)
+            payload.append(
+                self._3tab
+                + 'raise NotImplementedError("_callback is not implemented")'
+                + self._nl
+            )
+            payload.append(
+                self._2tab + "if not isinstance(_callback, FunctionType):" + self._nl
+            )
+            payload.append(
+                self._3tab
+                + 'raise RuntimeError("_callback is not callable")'
+                + self._nl
+            )
+            payload.append(self._2tab + "_callback()" + self._nl)
             payload.append(self._nl)
 
             f = open(self._filename, "a")
