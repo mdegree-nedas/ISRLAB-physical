@@ -13,6 +13,7 @@ class Freenove_4wd_smart_car:
 
 class _Sensors:
     def __init__(self):
+        self.topic = "sensors_topic"
         self.ultrasound = _Ultrasound()
         self.lightsensor = _Lightsensor()
         self.linetracker = _Linetracker()
@@ -44,6 +45,7 @@ class _Linetracker:
 
 class _Actuators:
     def __init__(self):
+        self.topic = "actuators_topic"
         self.motion = _Motion()
         self.led = _Led()
 

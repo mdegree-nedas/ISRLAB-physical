@@ -25,6 +25,7 @@ class TemplateGenerator:
             self._gen_vector_actuators,
             self._gen_commands_k,
             self._gen_vector_commands,
+            self._gen_vector_topics,
         ) = cfg_parse[:]
 
         self._sep = "/"

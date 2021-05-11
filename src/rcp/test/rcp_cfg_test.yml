@@ -1,5 +1,6 @@
 freenove_4WD_smart_car:
   sensors:
+    topic: 'sensors_topic'
     ultrasound:
       id: 'ultrasound_id'
       type: 'vector'
@@ -16,6 +17,7 @@ freenove_4WD_smart_car:
       address: 'linetracker_address'
       data: null
   actuators:
+    topic: 'actuators_topic'
     motion:
       id: 'motion_id'
       address: 'motion_address'
@@ -28,8 +30,8 @@ freenove_4WD_smart_car:
       id: 'led_id'
       address: 'led_address'
       commands:
-        - 'switch_on'
-        - 'switch_off'
+        - switch_on
+        - switch_off
   commands:
     go_forward:
       data: null
