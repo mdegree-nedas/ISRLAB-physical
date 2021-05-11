@@ -1,4 +1,4 @@
-from freenove_4WD_smart_car import Freenove_4wd_smart_car
+from freenove_4WD_smart_car.core import Freenove_4wd_smart_car
 
 
 def callb():
