@@ -1,4 +1,5 @@
 from pathlib import Path
+import os
 
 
 class Generator:
@@ -84,8 +85,10 @@ class Generator:
             self._gen_actuators_inner_class_commands_def(actuator)
         # other calls
 
+        self._finalize()
+
     # ##################################################
-    # GEN MAIN CLASS
+    # GEN EXTRA
 
     def _gen_imports(self):
         payload = [
@@ -96,6 +99,9 @@ class Generator:
         f = open(self._filename, "a")
         f.writelines(payload)
         f.close()
+
+    def _finalize(self):
+        os.system("black -q " + self._filename)
 
     # ##################################################
     # GEN MAIN CLASS

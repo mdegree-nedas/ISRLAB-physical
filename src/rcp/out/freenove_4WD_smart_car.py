@@ -3,16 +3,19 @@
 
 from types import FunctionType
 
+
 class Freenove_4wd_smart_car:
     def __init__(self):
         self.sensors = _Sensors()
         self.actuators = _Actuators()
+
 
 class _Sensors:
     def __init__(self):
         self.ultrasound = _Ultrasound()
         self.lightsensor = _Lightsensor()
         self.linetracker = _Linetracker()
+
 
 class _Ultrasound:
     def __init__(self):
@@ -21,12 +24,14 @@ class _Ultrasound:
         self.address = None
         self.data = None
 
+
 class _Lightsensor:
     def __init__(self):
         self.id = None
         self.type = None
         self.address = None
         self.data = None
+
 
 class _Linetracker:
     def __init__(self):
@@ -35,16 +40,19 @@ class _Linetracker:
         self.address = None
         self.data = None
 
+
 class _Actuators:
     def __init__(self):
         self.motion = _Motion()
         self.led = _Led()
+
 
 class _Motion:
     def __init__(self):
         self.id = None
         self.address = None
         self.commands = _MotionCommands()
+
 
 class _MotionCommands:
     def go_forward(self, _callback=None):
@@ -75,11 +83,13 @@ class _MotionCommands:
             raise RuntimeError("_callback is not callable")
         _callback()
 
+
 class _Led:
     def __init__(self):
         self.id = None
         self.address = None
         self.commands = _LedCommands()
+
 
 class _LedCommands:
     def switch_on(self, _callback=None):
@@ -95,4 +105,3 @@ class _LedCommands:
         if not isinstance(_callback, FunctionType):
             raise RuntimeError("_callback is not callable")
         _callback()
-
