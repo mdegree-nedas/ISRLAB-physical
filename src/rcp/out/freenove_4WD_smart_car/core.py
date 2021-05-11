@@ -26,6 +26,13 @@ class _Ultrasound:
         self.address = None
         self.data = None
 
+    def read(self, _callback=None):
+        if _callback == None:
+            raise NotImplementedError("_callback is not implemented")
+        if not isinstance(_callback, FunctionType):
+            raise RuntimeError("_callback is not callable")
+        _callback()
+
 
 class _Lightsensor:
     def __init__(self):
@@ -34,6 +41,13 @@ class _Lightsensor:
         self.address = None
         self.data = None
 
+    def read(self, _callback=None):
+        if _callback == None:
+            raise NotImplementedError("_callback is not implemented")
+        if not isinstance(_callback, FunctionType):
+            raise RuntimeError("_callback is not callable")
+        _callback()
+
 
 class _Linetracker:
     def __init__(self):
@@ -41,6 +55,13 @@ class _Linetracker:
         self.type = None
         self.address = None
         self.data = None
+
+    def read(self, _callback=None):
+        if _callback == None:
+            raise NotImplementedError("_callback is not implemented")
+        if not isinstance(_callback, FunctionType):
+            raise RuntimeError("_callback is not callable")
+        _callback()
 
 
 class _Actuators:
@@ -80,6 +101,34 @@ class _MotionCommands:
         _callback()
 
     def turn_right(self, _callback=None):
+        if _callback == None:
+            raise NotImplementedError("_callback is not implemented")
+        if not isinstance(_callback, FunctionType):
+            raise RuntimeError("_callback is not callable")
+        _callback()
+
+    def action_atomic(self, _callback=None):
+        if _callback == None:
+            raise NotImplementedError("_callback is not implemented")
+        if not isinstance(_callback, FunctionType):
+            raise RuntimeError("_callback is not callable")
+        _callback()
+
+    def action_indefinite(self, _callback=None):
+        if _callback == None:
+            raise NotImplementedError("_callback is not implemented")
+        if not isinstance(_callback, FunctionType):
+            raise RuntimeError("_callback is not callable")
+        _callback()
+
+    def action_durative_no_data(self, _callback=None):
+        if _callback == None:
+            raise NotImplementedError("_callback is not implemented")
+        if not isinstance(_callback, FunctionType):
+            raise RuntimeError("_callback is not callable")
+        _callback()
+
+    def action_durative(self, _callback=None):
         if _callback == None:
             raise NotImplementedError("_callback is not implemented")
         if not isinstance(_callback, FunctionType):

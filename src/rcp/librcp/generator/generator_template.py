@@ -69,6 +69,11 @@ class TemplateGenerator:
         self._initialize_template()
         self._gen_template_imports()
 
+        self._gen_template_sensors()
+
+        # for c in self._gen_vector_commands:
+        #     print(self._cfg_dict[self._gen_name_k][self._gen_commands_k][c])
+
         self._finalize()
 
     # ##################################################
@@ -86,3 +91,19 @@ class TemplateGenerator:
     def _finalize(self):
         print("finalize: " + self._filename)
         os.system("black -q " + self._filename)
+
+    # ##################################################
+    # GEN TEMPLATE SENSORS
+
+    def _gen_template_sensors(self):
+        for sensor in self._gen_vector_sensors:
+            payload = [
+                "def " + sensor + "_read_callback():" + self._nl,
+            ]
+            payload.append(
+                self._tab + 'print("sensor callback: ' + sensor + '")' + self._nl
+            )
+
+            f = open(self._filename, "a")
+            f.writelines(payload)
+            f.close()

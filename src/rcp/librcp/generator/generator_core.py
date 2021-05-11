@@ -173,6 +173,20 @@ class CoreGenerator:
         for k in self._cfg_dict[self._gen_name_k][self._gen_sensors_k][sensor].keys():
             payload.append(self._2tab + "self." + k + " = " + "None" + self._nl)
         payload.append(self._nl)
+        payload.append(self._tab + "def read(self, _callback=None):" + self._nl)
+        payload.append(self._2tab + "if _callback == None:" + self._nl)
+        payload.append(
+            self._3tab
+            + 'raise NotImplementedError("_callback is not implemented")'
+            + self._nl
+        )
+        payload.append(
+            self._2tab + "if not isinstance(_callback, FunctionType):" + self._nl
+        )
+        payload.append(
+            self._3tab + 'raise RuntimeError("_callback is not callable")' + self._nl
+        )
+        payload.append(self._2tab + "_callback()" + self._nl)
 
         f = open(self._filename, "a")
         f.writelines(payload)
