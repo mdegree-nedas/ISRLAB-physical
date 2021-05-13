@@ -1,28 +1,22 @@
-import json
-import sys
-from redis_interface.redis_interface import RedisMiddleware
+from redis_wrapper.redis_wrapper import RedisWrapper
+import threading
 
-def go_forward(data):
-    print("forward function, data:", str(data))
+def listener():
+    for msg in redis.listen():
+        print(msg)
 
-def go_back(data):
-    print("back function, data:", str(data))
+redis = RedisWrapper()
 
-middleware = RedisMiddleware("sensors", "actuators")
-middleware.register_command_callback("go_forward", go_forward)
-middleware.register_command_callback("go_back", go_back)
+redis.set("test", "value")
+print("redis get: ", redis.get("test"))
 
-middleware.start_listen()
+redis.subscribe("sub_chan_1")
+redis.subscribe("sub_chan_2")
 
-print("waiting for input...")
-print("press s to send sensor data example")
+threading.Thread(target=listener).start()
 
+print("awaiting commands (s to send a test publish)")
 while True:
     com = input()
-    if com == "e":
-        sys.exit(0)
-    elif com == "s":
-        # send a sensor data
-        middleware.send_sensor_data('{"sensor_name": "ultrasound", "data": [1,2,3,4,5,6]}')
-    else:
-        sys.exit(0)
+    if com == "s":
+        redis.publish("pub_chan", "Hi")
