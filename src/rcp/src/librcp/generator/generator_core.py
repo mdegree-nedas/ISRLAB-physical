@@ -25,7 +25,6 @@ class CoreGenerator:
             self._gen_vector_actuators,
             self._gen_commands_k,
             self._gen_vector_commands,
-            self._gen_vector_topics,
         ) = cfg_parse[:]
 
         self._sep = "/"
@@ -139,9 +138,6 @@ class CoreGenerator:
 
     def _gen_core_sensors_class__init__(self):
         payload = [self._tab + "def __init__(self):" + self._nl]
-        payload.append(
-            self._2tab + 'self.topic = "' + self._gen_vector_topics[0] + '"' + self._nl
-        )
         for sensor in self._gen_vector_sensors:
             payload.append(
                 self._2tab
@@ -206,9 +202,6 @@ class CoreGenerator:
 
     def _gen_core_actuators_class__init__(self):
         payload = [self._tab + "def __init__(self):" + self._nl]
-        payload.append(
-            self._2tab + 'self.topic = "' + self._gen_vector_topics[1] + '"' + self._nl
-        )
         for actuator in self._gen_vector_actuators:
             payload.append(
                 self._2tab

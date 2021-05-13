@@ -15,7 +15,7 @@ def main():
 
 
 if __name__ == "__main__":
-    from librcp.core.rcp import Rcp
+    from librcp.core.core import Rcp
     import sys
 
     main()

@@ -5,11 +5,3 @@
 
 def ultrasound_read_callback():
     print("sensor callback: ultrasound")
-
-
-def lightsensor_read_callback():
-    print("sensor callback: lightsensor")
-
-
-def linetracker_read_callback():
-    print("sensor callback: linetracker")

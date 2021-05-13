@@ -7,8 +7,8 @@ class Structure:
 
     def _initialize(self):
         self._cfg_default_classes = ["sensors", "actuators", "commands"]
-        self._cfg_default_sensors_fields = ["id", "type", "address", "data"]
-        self._cfg_default_actuators_fields = ["id", "address", "commands"]
+        self._cfg_default_sensors_fields = ["id", "type", "address", "topic", "data"]
+        self._cfg_default_actuators_fields = ["id", "address", "topic", "commands"]
         self._cfg_default_commands_fields = ["data", "time"]
 
         self._cfg_vector_name = []
@@ -20,7 +20,6 @@ class Structure:
         self._cfg_vector_actuators_fields = []
         self._cfg_vector_commands = []
         self._cfg_vector_commands_fields = []
-        self._cfg_vector_topics = []
 
     def cfg_validate(self, cfg_dict):
         self._initialize()
@@ -34,22 +33,16 @@ class Structure:
 
         sensors_k, actuators_k, commands_k = self._cfg_vector_classes[:]
 
-        _cfg_vector_sensors = list(cfg_dict[name_k][sensors_k].keys())
-
-        self._cfg_vector_topics.append(cfg_dict[name_k][sensors_k]["topic"])
-        self._cfg_vector_sensors = _cfg_vector_sensors[1:]
+        self._cfg_vector_sensors = list(cfg_dict[name_k][sensors_k].keys())
 
         for sensor in self._cfg_vector_sensors:
             self._cfg_vector_sensors_fields = list(
                 cfg_dict[name_k][sensors_k][sensor].keys()
             )
-            assert len(self._cfg_vector_sensors_fields) == 4
+            assert len(self._cfg_vector_sensors_fields) == 5
             assert self._cfg_vector_sensors_fields == self._cfg_default_sensors_fields
 
-        _cfg_vector_actuators = list(cfg_dict[name_k][actuators_k].keys())
-
-        self._cfg_vector_topics.append(cfg_dict[name_k][actuators_k]["topic"])
-        self._cfg_vector_actuators = _cfg_vector_actuators[1:]
+        self._cfg_vector_actuators = list(cfg_dict[name_k][actuators_k].keys())
 
         for actuator in self._cfg_vector_actuators:
             self._cfg_vector_actuators_fields = list(
@@ -58,7 +51,7 @@ class Structure:
             self._cfg_vector_actuators_commands.append(
                 list(cfg_dict[name_k][actuators_k][actuator]["commands"])
             )
-            assert len(self._cfg_vector_actuators_fields) == 3
+            assert len(self._cfg_vector_actuators_fields) == 4
             assert (
                 self._cfg_vector_actuators_fields == self._cfg_default_actuators_fields
             )
@@ -84,5 +77,4 @@ class Structure:
             self._cfg_vector_actuators,
             commands_k,
             self._cfg_vector_commands,
-            self._cfg_vector_topics,
         ]
