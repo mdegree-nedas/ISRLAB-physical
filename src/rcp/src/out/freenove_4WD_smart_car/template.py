@@ -4,4 +4,8 @@
 
 
 def ultrasound_read_callback():
-    print("sensor callback: ultrasound")
+    print("ultrasound.read.callback")
+
+
+def motion_go_forward_callback():
+    print("motion.go_forward.callback")

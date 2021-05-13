@@ -69,6 +69,7 @@ class TemplateGenerator:
         self._gen_template_imports()
 
         self._gen_template_sensors()
+        self._gen_template_actuators()
 
         # for c in self._gen_vector_commands:
         #     print(self._cfg_dict[self._gen_name_k][self._gen_commands_k][c])
@@ -100,9 +101,34 @@ class TemplateGenerator:
                 "def " + sensor + "_read_callback():" + self._nl,
             ]
             payload.append(
-                self._tab + 'print("sensor callback: ' + sensor + '")' + self._nl
+                self._tab + 'print("' + sensor + ".read" + '.callback")' + self._nl
             )
 
             f = open(self._filename, "a")
             f.writelines(payload)
             f.close()
+
+    # ##################################################
+    # GEN TEMPLATE ACTUATORS
+
+    def _gen_template_actuators(self):
+        for actuator in self._gen_vector_actuators:
+            for k in self._cfg_dict[self._gen_name_k][self._gen_actuators_k][actuator][
+                "commands"
+            ]:
+                payload = [
+                    "def " + actuator + "_" + k + "_callback():" + self._nl,
+                ]
+                payload.append(
+                    self._tab
+                    + 'print("'
+                    + actuator
+                    + "."
+                    + k
+                    + '.callback")'
+                    + self._nl
+                )
+
+                f = open(self._filename, "a")
+                f.writelines(payload)
+                f.close()

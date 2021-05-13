@@ -18,10 +18,10 @@ class _Sensors:
 
 class _Ultrasound:
     def __init__(self):
-        self.id = None
-        self.type = None
-        self.address = None
-        self.topic = None
+        self.id = "ultrasound_id"
+        self.type = "vector"
+        self.address = "ultrasound_address"
+        self.topic = "ultrasound_topic_noros_to_ros"
         self.data = None
 
     def read(self, _callback=None):
@@ -39,9 +39,9 @@ class _Actuators:
 
 class _Motion:
     def __init__(self):
-        self.id = None
-        self.address = None
-        self.topic = None
+        self.id = "motion_id"
+        self.address = "motion_address"
+        self.topic = "motion_topic_ros_to_noros"
         self.commands = _MotionCommands()
 
 

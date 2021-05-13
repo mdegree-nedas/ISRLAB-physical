@@ -165,9 +165,15 @@ class CoreGenerator:
 
     def _gen_core_sensors_inner_class_def(self, sensor):
         payload = [self._tab + "def __init__(self):" + self._nl]
-        # TODO: initialize w/ correct values, hint required #
-        for k in self._cfg_dict[self._gen_name_k][self._gen_sensors_k][sensor].keys():
-            payload.append(self._2tab + "self." + k + " = " + "None" + self._nl)
+        for k, v in self._cfg_dict[self._gen_name_k][self._gen_sensors_k][
+            sensor
+        ].items():
+            if v is not None:
+                payload.append(
+                    self._2tab + "self." + k + " = " + '"' + v + '"' + self._nl
+                )
+            else:
+                payload.append(self._2tab + "self." + k + " = " + "None" + self._nl)
         payload.append(self._nl)
         payload.append(self._tab + "def read(self, _callback=None):" + self._nl)
         payload.append(self._2tab + "if _callback == None:" + self._nl)
@@ -229,12 +235,13 @@ class CoreGenerator:
 
     def _gen_core_actuators_inner_class_def(self, actuator):
         payload = [self._tab + "def __init__(self):" + self._nl]
-        # TODO: initialize w/ correct values, hint required #
-        for k in self._cfg_dict[self._gen_name_k][self._gen_actuators_k][
+        for k, v in self._cfg_dict[self._gen_name_k][self._gen_actuators_k][
             actuator
-        ].keys():
+        ].items():
             if k != "commands":
-                payload.append(self._2tab + "self." + k + " = " + "None" + self._nl)
+                payload.append(
+                    self._2tab + "self." + k + " = " + '"' + v + '"' + self._nl
+                )
             else:
                 payload.append(
                     self._2tab
