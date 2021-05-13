@@ -68,6 +68,9 @@ class InterfaceGenerator:
         self._initialize_interface()
         self._gen_interface_imports()
 
+        self._gen_interface_redis_wrapper_common()
+        self._gen_interface_redis_wrapper_class()
+
         self._finalize()
 
     # ##################################################
@@ -75,6 +78,7 @@ class InterfaceGenerator:
 
     def _gen_interface_imports(self):
         payload = [
+            "import redis" + self._nl,
             self._nl,
         ]
 
@@ -85,3 +89,40 @@ class InterfaceGenerator:
     def _finalize(self):
         print("finalize: " + self._filename)
         os.system("black -q " + self._filename)
+
+    # ##################################################
+    # GEN REDIS WRAPPER
+
+    def _gen_interface_redis_wrapper_common(self):
+        payload = [
+            'SERVER_ADDR = "0.0.0.0"' + self._nl,
+            "SERVER_PORT = 6379" + self._nl,
+            "SERVER_DRDB = 0" + self._nl,
+        ]
+
+        f = open(self._filename, "a")
+        f.writelines(payload)
+        f.close()
+
+    def _gen_interface_redis_wrapper_class(self):
+        payload = [
+            "class RedisWrapper:" + self._nl,
+            self._tab
+            + "def __init__(self, host=SERVER_ADDR, port=SERVER_PORT, db=SERVER_DRDB):"
+            + self._nl,
+            self._2tab
+            + "self._redis = redis.Redis(host=host, port=port, db=db)"
+            + self._nl,
+            self._2tab + "self._redis_pubsub = self._redis.pubsub()" + self._nl,
+            self._nl,
+            self._tab + "def publish(self, topic, data):" + self._nl,
+            self._2tab + "return self._redis_pubsub.publish(topic, data)" + self._nl,
+            self._nl,
+            self._tab + "def subscribe(self, topic):" + self._nl,
+            self._2tab + "return self._redis_pubsub.subscribe(topic)" + self._nl,
+            self._nl,
+        ]
+
+        f = open(self._filename, "a")
+        f.writelines(payload)
+        f.close()

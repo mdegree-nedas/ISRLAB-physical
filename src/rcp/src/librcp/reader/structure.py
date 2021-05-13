@@ -69,6 +69,19 @@ class Structure:
             assert len(self._cfg_vector_commands_fields) == 2
             assert self._cfg_vector_commands_fields == self._cfg_default_commands_fields
 
+        for sensor in self._cfg_vector_sensors:
+            assert type(cfg_dict[name_k][sensors_k][sensor]["id"]) == str
+            assert type(cfg_dict[name_k][sensors_k][sensor]["type"]) == str
+            assert type(cfg_dict[name_k][sensors_k][sensor]["address"]) == str
+            assert type(cfg_dict[name_k][sensors_k][sensor]["topic"]) == str
+            # assert type(cfg_dict[name_k][sensors_k][sensor]["data"]) == str
+
+        for actuator in self._cfg_vector_actuators:
+            assert type(cfg_dict[name_k][actuators_k][actuator]["id"]) == str
+            assert type(cfg_dict[name_k][actuators_k][actuator]["address"]) == str
+            assert type(cfg_dict[name_k][actuators_k][actuator]["topic"]) == str
+            assert type(cfg_dict[name_k][actuators_k][actuator]["commands"]) == list
+
         return [
             name_k,
             sensors_k,
