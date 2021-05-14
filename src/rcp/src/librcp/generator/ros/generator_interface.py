@@ -85,7 +85,7 @@ class RosInterfaceGenerator:
         f.close()
 
     def _finalize(self):
-        print("finalize: " + self._filename)
+        print("finalize >   ros > " + self._filename)
         os.system("black -q " + self._filename)
 
     # ##################################################
@@ -93,7 +93,7 @@ class RosInterfaceGenerator:
 
     def _gen_interface_twist_wrapper_class(self):
         payload = [
-            "class GeometryMsgsTwist:" + self._nl,
+            "class _GeometryMsgsTwist:" + self._nl,
             self._tab + "def __init__(self, topic, command, msg):" + self._nl,
             self._2tab + "self._topic = topic" + self._nl,
             self._2tab + "self._command = command" + self._nl,

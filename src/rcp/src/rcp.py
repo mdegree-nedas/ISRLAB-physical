@@ -12,8 +12,8 @@ def main():
         cfg_parse = rcp.parser.structure.cfg_validate(cfg_dict)
 
         rcp.generator.noros_core.generate(cfg_dict, cfg_parse)
+        rcp.generator.noros_broker.generate(cfg_dict, cfg_parse)
         rcp.generator.noros_template.generate(cfg_dict, cfg_parse)
-        rcp.generator.noros_interface.generate(cfg_dict, cfg_parse)
 
         # rcp.generator.ros_core.generate(cfg_dict, cfg_parse)
         # rcp.generator.ros_broker.generate(cfg_dict, cfg_parse)
