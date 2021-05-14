@@ -1,10 +1,10 @@
-from librcp.generator.generator_core import CoreGenerator
-from librcp.generator.generator_template import TemplateGenerator
-from librcp.generator.generator_interface import InterfaceGenerator
+from librcp.generator.noros.generator_core import NoRosCoreGenerator
+from librcp.generator.noros.generator_template import NoRosTemplateGenerator
+from librcp.generator.noros.generator_interface import NoRosInterfaceGenerator
 
 
 class Generator:
     def __init__(self):
-        self.core = CoreGenerator()
-        self.template = TemplateGenerator()
-        self.interface = InterfaceGenerator()
+        self.noros_core = NoRosCoreGenerator()
+        self.noros_template = NoRosTemplateGenerator()
+        self.noros_interface = NoRosInterfaceGenerator()

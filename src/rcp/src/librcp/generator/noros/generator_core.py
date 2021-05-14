@@ -2,7 +2,7 @@ from pathlib import Path
 import os
 
 
-class CoreGenerator:
+class NoRosCoreGenerator:
     def __init__(self):
         self._cfg_dict = None
 
@@ -37,7 +37,7 @@ class CoreGenerator:
 
     def _initialize_core(self):
         self._prefix = "."
-        self._destdir = "out" + self._sep + self._gen_name_k
+        self._destdir = "out" + self._sep + self._gen_name_k + self._sep + "noros"
         Path(self._prefix + self._sep + self._destdir).mkdir(
             parents=True, exist_ok=True
         )

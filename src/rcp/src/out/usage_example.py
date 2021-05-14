@@ -1,5 +1,5 @@
-from freenove_4WD_smart_car.core import Freenove_4wd_smart_car
-import freenove_4WD_smart_car.template as template
+from freenove_4WD_smart_car.noros.core import Freenove_4wd_smart_car
+import freenove_4WD_smart_car.noros.template as template
 
 
 def main():
