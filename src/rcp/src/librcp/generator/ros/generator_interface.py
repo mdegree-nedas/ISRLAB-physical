@@ -95,17 +95,17 @@ class RosInterfaceGenerator:
         payload = [
             "class GeometryMsgsTwist:" + self._nl,
             self._tab + "def __init__(self, topic, command, msg):" + self._nl,
-            self._2tab + "self._topic = topic" + self._nl,
-            self._2tab + "self._command = command" + self._nl,
-            self._2tab + "self._data = {}" + self._nl,
-            self._2tab + 'self._data["linear"] = {}' + self._nl,
-            self._2tab + 'self._data["angular"] = {}' + self._nl,
-            self._2tab + 'self._data["linear"]["x"] = msg.linear.x' + self._nl,
-            self._2tab + 'self._data["linear"]["y"] = msg.linear.y' + self._nl,
-            self._2tab + 'self._data["linear"]["z"] = msg.linear.z' + self._nl,
-            self._2tab + 'self._data["angular"]["x"] = msg.angular.x' + self._nl,
-            self._2tab + 'self._data["angular"]["y"] = msg.angular.y' + self._nl,
-            self._2tab + 'self._data["angular"]["z"] = msg.angular.z' + self._nl,
+            self._2tab + "self.topic = topic" + self._nl,
+            self._2tab + "self.command = command" + self._nl,
+            self._2tab + "self.data = {}" + self._nl,
+            self._2tab + 'self.data["linear"] = {}' + self._nl,
+            self._2tab + 'self.data["angular"] = {}' + self._nl,
+            self._2tab + 'self.data["linear"]["x"] = msg.linear.x' + self._nl,
+            self._2tab + 'self.data["linear"]["y"] = msg.linear.y' + self._nl,
+            self._2tab + 'self.data["linear"]["z"] = msg.linear.z' + self._nl,
+            self._2tab + 'self.data["angular"]["x"] = msg.angular.x' + self._nl,
+            self._2tab + 'self.data["angular"]["y"] = msg.angular.y' + self._nl,
+            self._2tab + 'self.data["angular"]["z"] = msg.angular.z' + self._nl,
         ]
 
         f = open(self._filename, "a")

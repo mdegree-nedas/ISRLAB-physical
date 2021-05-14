@@ -5,14 +5,14 @@
 
 class GeometryMsgsTwist:
     def __init__(self, topic, command, msg):
-        self._topic = topic
-        self._command = command
-        self._data = {}
-        self._data["linear"] = {}
-        self._data["angular"] = {}
-        self._data["linear"]["x"] = msg.linear.x
-        self._data["linear"]["y"] = msg.linear.y
-        self._data["linear"]["z"] = msg.linear.z
-        self._data["angular"]["x"] = msg.angular.x
-        self._data["angular"]["y"] = msg.angular.y
-        self._data["angular"]["z"] = msg.angular.z
+        self.topic = topic
+        self.command = command
+        self.data = {}
+        self.data["linear"] = {}
+        self.data["angular"] = {}
+        self.data["linear"]["x"] = msg.linear.x
+        self.data["linear"]["y"] = msg.linear.y
+        self.data["linear"]["z"] = msg.linear.z
+        self.data["angular"]["x"] = msg.angular.x
+        self.data["angular"]["y"] = msg.angular.y
+        self.data["angular"]["z"] = msg.angular.z
