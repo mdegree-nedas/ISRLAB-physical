@@ -37,7 +37,7 @@ class RosBrokerGenerator:
 
     def _initialize_broker(self):
         self._prefix = "."
-        self._destdir = "out" + self._sep + self._gen_name_k + self._sep + "noros"
+        self._destdir = "out" + self._sep + self._gen_name_k + self._sep + "ros"
         Path(self._prefix + self._sep + self._destdir).mkdir(
             parents=True, exist_ok=True
         )
@@ -66,6 +66,12 @@ class RosBrokerGenerator:
         self._gen_broker_redis_wrapper_common()
         self._gen_broker_redis_wrapper_class()
 
+        self._gen_broker_redis_middleware_class()
+        self._gen_broker_redis_middleware_send()
+
+        self._gen_broker_converter_class()
+        self._gen_broker_converter_to_json()
+
         self._finalize()
 
     # ##################################################
@@ -73,7 +79,9 @@ class RosBrokerGenerator:
 
     def _gen_broker_imports(self):
         payload = [
+            "import interface" + self._nl,
             "import redis" + self._nl,
+            "import json" + self._nl,
             self._nl,
         ]
 
@@ -84,6 +92,29 @@ class RosBrokerGenerator:
     def _finalize(self):
         print("finalize > noros > " + self._filename)
         os.system("black -q " + self._filename)
+
+    # ##################################################
+    # GEN REDIS CONVERTER
+
+    def _gen_broker_converter_class(self):
+        payload = [
+            "class __Converter:" + self._nl,
+        ]
+
+        f = open(self._filename, "a")
+        f.writelines(payload)
+        f.close()
+
+    def _gen_broker_converter_to_json(self):
+        payload = [
+            self._tab + "def to_json(self, msg):" + self._nl,
+            self._2tab + "return json.dumps(msg.__dict__)" + self._nl,
+            self._nl,
+        ]
+
+        f = open(self._filename, "a")
+        f.writelines(payload)
+        f.close()
 
     # ##################################################
     # GEN REDIS WRAPPER
@@ -101,7 +132,7 @@ class RosBrokerGenerator:
 
     def _gen_broker_redis_wrapper_class(self):
         payload = [
-            "class RedisWrapper:" + self._nl,
+            "class __RedisWrapper:" + self._nl,
             self._tab
             + "def __init__(self, host=SERVER_ADDR, port=SERVER_PORT, db=SERVER_DRDB):"
             + self._nl,
@@ -110,12 +141,45 @@ class RosBrokerGenerator:
             + self._nl,
             self._2tab + "self._redis_pubsub = self._redis.pubsub()" + self._nl,
             self._nl,
-            self._tab + "def publish(self, topic, data):" + self._nl,
-            self._2tab + "return self._redis_pubsub.publish(topic, data)" + self._nl,
+            self._tab + "def publish(self, topic, msg):" + self._nl,
+            self._2tab + "return self._redis.publish(topic, msg)" + self._nl,
             self._nl,
             self._tab + "def subscribe(self, topic):" + self._nl,
             self._2tab + "return self._redis_pubsub.subscribe(topic)" + self._nl,
             self._nl,
+        ]
+
+        f = open(self._filename, "a")
+        f.writelines(payload)
+        f.close()
+
+    # ##################################################
+    # GEN REDIS MIDDLEWARE
+
+    def _gen_broker_redis_middleware_class(self):
+        payload = [
+            "class RedisMiddleware:" + self._nl,
+            self._tab + "def __init__(self):" + self._nl,
+            self._2tab + "self._redis_wrapper = __RedisWrapper()" + self._nl,
+            self._2tab + "self._converter = __Converter()" + self._nl,
+        ]
+
+        f = open(self._filename, "a")
+        f.writelines(payload)
+        f.close()
+
+    def _gen_broker_redis_middleware_send(self):
+        payload = [
+            self._tab + "def send(self, topic, command, msg_type, msg):" + self._nl,
+            self._2tab + 'if msg_type is "twist":' + self._nl,
+            self._3tab
+            + "msg = interface.GeometryMsgsTwist(topic, command, msg)"
+            + self._nl,
+            self._2tab + "else:" + self._nl,
+            self._3tab + 'raise RuntimeError("incorrect ros message type")' + self._nl,
+            self._nl,
+            self._2tab + "msg_json = self._converter.to_json(msg)" + self._nl,
+            self._2tab + "self._redis_wrapper.publish(topic, msg_json)" + self._nl,
         ]
 
         f = open(self._filename, "a")

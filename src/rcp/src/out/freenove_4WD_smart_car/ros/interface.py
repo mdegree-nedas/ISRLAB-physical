@@ -7,12 +7,21 @@ class GeometryMsgsTwist:
     def __init__(self, topic, command, msg):
         self.topic = topic
         self.command = command
-        self.data = {}
-        self.data["linear"] = {}
-        self.data["angular"] = {}
-        self.data["linear"]["x"] = msg.linear.x
-        self.data["linear"]["y"] = msg.linear.y
-        self.data["linear"]["z"] = msg.linear.z
-        self.data["angular"]["x"] = msg.angular.x
-        self.data["angular"]["y"] = msg.angular.y
-        self.data["angular"]["z"] = msg.angular.z
+        self.data = self.GeometryMsgsTwistData(msg)
+
+    class GeometryMsgsTwistData:
+        def __init__(self):
+            self.linear = self.GeometryMsgsTwistDataLinear(msg)
+            self.angular = self.GeometryMsgsTwistDataAngular(msg)
+
+        class GeometryMsgsTwistDataLinear:
+            def __init__(self, msg):
+                self.x = msg.linear.x
+                self.y = msg.linear.y
+                self.z = msg.linear.z
+
+        class GeometryMsgsTwistDataAngular:
+            def __init__(self, msg):
+                self.x = msg.angular.x
+                self.y = msg.angular.y
+                self.z = msg.angular.z

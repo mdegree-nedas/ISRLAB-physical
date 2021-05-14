@@ -33,6 +33,7 @@ class RosInterfaceGenerator:
         self._tab = "    "
         self._2tab = self._tab * 2
         self._3tab = self._tab * 3
+        self._4tab = self._tab * 4
         self._nl = "\n"
 
     def _initialize_interface(self):
@@ -98,15 +99,27 @@ class RosInterfaceGenerator:
             self._tab + "def __init__(self, topic, command, msg):" + self._nl,
             self._2tab + "self.topic = topic" + self._nl,
             self._2tab + "self.command = command" + self._nl,
-            self._2tab + "self.data = {}" + self._nl,
-            self._2tab + 'self.data["linear"] = {}' + self._nl,
-            self._2tab + 'self.data["angular"] = {}' + self._nl,
-            self._2tab + 'self.data["linear"]["x"] = msg.linear.x' + self._nl,
-            self._2tab + 'self.data["linear"]["y"] = msg.linear.y' + self._nl,
-            self._2tab + 'self.data["linear"]["z"] = msg.linear.z' + self._nl,
-            self._2tab + 'self.data["angular"]["x"] = msg.angular.x' + self._nl,
-            self._2tab + 'self.data["angular"]["y"] = msg.angular.y' + self._nl,
-            self._2tab + 'self.data["angular"]["z"] = msg.angular.z' + self._nl,
+            self._2tab + "self.data = self.GeometryMsgsTwistData(msg)" + self._nl,
+            self._nl,
+            self._tab + "class GeometryMsgsTwistData:" + self._nl,
+            self._2tab + "def __init__(self):" + self._nl,
+            self._3tab
+            + "self.linear = self.GeometryMsgsTwistDataLinear(msg)"
+            + self._nl,
+            self._3tab
+            + "self.angular = self.GeometryMsgsTwistDataAngular(msg)"
+            + self._nl,
+            self._nl,
+            self._2tab + "class GeometryMsgsTwistDataLinear:" + self._nl,
+            self._3tab + "def __init__(self, msg):" + self._nl,
+            self._4tab + "self.x = msg.linear.x" + self._nl,
+            self._4tab + "self.y = msg.linear.y" + self._nl,
+            self._4tab + "self.z = msg.linear.z" + self._nl,
+            self._2tab + "class GeometryMsgsTwistDataAngular:" + self._nl,
+            self._3tab + "def __init__(self, msg):" + self._nl,
+            self._4tab + "self.x = msg.angular.x" + self._nl,
+            self._4tab + "self.y = msg.angular.y" + self._nl,
+            self._4tab + "self.z = msg.angular.z" + self._nl,
         ]
 
         f = open(self._filename, "a")

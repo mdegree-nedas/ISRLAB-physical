@@ -4,6 +4,7 @@ from librcp.generator.noros.generator_broker import NoRosBrokerGenerator
 
 from librcp.generator.ros.generator_core import RosCoreGenerator
 from librcp.generator.ros.generator_interface import RosInterfaceGenerator
+from librcp.generator.ros.generator_broker import RosBrokerGenerator
 
 
 class Generator:
@@ -14,3 +15,4 @@ class Generator:
 
         self.ros_core = RosCoreGenerator()
         self.ros_interface = RosInterfaceGenerator()
+        self.ros_broker = RosBrokerGenerator()
