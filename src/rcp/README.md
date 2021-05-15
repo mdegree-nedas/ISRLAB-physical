@@ -1,5 +1,11 @@
 ###### RCP - Robot Configuration Parser
 ---
+##### info
+---
+##### ros2 implemented custom message interfaces (from ros2 message broker, middleware)
+* geometry_msgs / msg
+  * Twist
+---
 ##### code generation
 ---
 ###### 1 -- define the robot configuration yml file
@@ -89,7 +95,7 @@ user@dockervirtmach:~$ pip install redis
 ```console
 user@dockervirtmach:~$ ros2 pkg create --build-type ament_python <package_name>
 user@dockervirtmach:~$ colcon build --symlink-install
-user@dockervirtmach:~$ source install/setup.bash
+user@dockervirtmach:~$ . install/setup.bash
 user@dockervirtmach:~$ ros2 run <package_name> <node-name>
 ```
 ###### 4 -- use shared volume
