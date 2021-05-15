@@ -1,7 +1,7 @@
 import random
 import time
 
-from freenove_4WD_smart_car.ros.core import Freenove_4wd_smart_car
+from .ros.core import Freenove_4wd_smart_car
 
 from geometry_msgs.msg import Twist
 

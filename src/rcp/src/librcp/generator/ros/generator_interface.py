@@ -102,7 +102,7 @@ class RosInterfaceGenerator:
             self._2tab + "self.data = self.GeometryMsgsTwistData(msg)" + self._nl,
             self._nl,
             self._tab + "class GeometryMsgsTwistData:" + self._nl,
-            self._2tab + "def __init__(self):" + self._nl,
+            self._2tab + "def __init__(self, msg):" + self._nl,
             self._3tab
             + "self.linear = self.GeometryMsgsTwistDataLinear(msg)"
             + self._nl,

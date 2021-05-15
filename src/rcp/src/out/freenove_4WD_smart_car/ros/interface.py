@@ -10,7 +10,7 @@ class GeometryMsgsTwist:
         self.data = self.GeometryMsgsTwistData(msg)
 
     class GeometryMsgsTwistData:
-        def __init__(self):
+        def __init__(self, msg):
             self.linear = self.GeometryMsgsTwistDataLinear(msg)
             self.angular = self.GeometryMsgsTwistDataAngular(msg)
 

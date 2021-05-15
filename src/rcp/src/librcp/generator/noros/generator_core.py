@@ -41,6 +41,9 @@ class NoRosCoreGenerator:
         Path(self._prefix + self._sep + self._destdir).mkdir(
             parents=True, exist_ok=True
         )
+        Path(
+            self._prefix + self._sep + self._destdir + self._sep + "__init__.py"
+        ).touch()
 
         self._filename = (
             self._prefix + self._sep + self._destdir + self._sep + "core" + self._ext

@@ -42,6 +42,9 @@ class RosCoreGenerator:
         Path(self._prefix + self._sep + self._destdir).mkdir(
             parents=True, exist_ok=True
         )
+        Path(
+            self._prefix + self._sep + self._destdir + self._sep + "__init__.py"
+        ).touch()
 
         self._filename = (
             self._prefix + self._sep + self._destdir + self._sep + "core" + self._ext
@@ -78,7 +81,7 @@ class RosCoreGenerator:
 
     def _gen_core_imports(self):
         payload = [
-            "from broker import RedisMiddleware",
+            "from .broker import RedisMiddleware",
             self._nl,
         ]
 

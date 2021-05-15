@@ -70,7 +70,7 @@ class RosBrokerGenerator:
         self._gen_broker_redis_middleware_send()
 
         self._gen_broker_converter_class()
-        self._gen_broker_converter_to_json()
+        self._gen_broker_converter_GeometryMsgsTwistToJson()
 
         self._finalize()
 
@@ -79,7 +79,7 @@ class RosBrokerGenerator:
 
     def _gen_broker_imports(self):
         payload = [
-            "import interface" + self._nl,
+            "from .interface import *" + self._nl,
             "import redis" + self._nl,
             "import json" + self._nl,
             self._nl,
@@ -98,17 +98,19 @@ class RosBrokerGenerator:
 
     def _gen_broker_converter_class(self):
         payload = [
-            "class __Converter:" + self._nl,
+            "class _Converter:" + self._nl,
         ]
 
         f = open(self._filename, "a")
         f.writelines(payload)
         f.close()
 
-    def _gen_broker_converter_to_json(self):
+    def _gen_broker_converter_GeometryMsgsTwistToJson(self):
         payload = [
-            self._tab + "def to_json(self, msg):" + self._nl,
-            self._2tab + "return json.dumps(msg.__dict__)" + self._nl,
+            self._tab + "def GeometryMsgsTwistToJson(self, msg):" + self._nl,
+            self._2tab
+            + "return json.dumps({'topic': msg.topic, 'command': msg.command, 'data': {'linear': {'x': msg.data.linear.x, 'y': msg.data.linear.y, 'z': msg.data.linear.z}, 'angular': {'x': msg.data.angular.x, 'y': msg.data.angular.y, 'z': msg.data.angular.z}}})"
+            + self._nl,
             self._nl,
         ]
 
@@ -132,7 +134,7 @@ class RosBrokerGenerator:
 
     def _gen_broker_redis_wrapper_class(self):
         payload = [
-            "class __RedisWrapper:" + self._nl,
+            "class _RedisWrapper:" + self._nl,
             self._tab
             + "def __init__(self, host=SERVER_ADDR, port=SERVER_PORT, db=SERVER_DRDB):"
             + self._nl,
@@ -160,8 +162,8 @@ class RosBrokerGenerator:
         payload = [
             "class RedisMiddleware:" + self._nl,
             self._tab + "def __init__(self):" + self._nl,
-            self._2tab + "self._redis_wrapper = __RedisWrapper()" + self._nl,
-            self._2tab + "self._converter = __Converter()" + self._nl,
+            self._2tab + "self._redis_wrapper = _RedisWrapper()" + self._nl,
+            self._2tab + "self._converter = _Converter()" + self._nl,
         ]
 
         f = open(self._filename, "a")
@@ -172,14 +174,14 @@ class RosBrokerGenerator:
         payload = [
             self._tab + "def send(self, topic, command, msg_type, msg):" + self._nl,
             self._2tab + 'if msg_type is "twist":' + self._nl,
+            self._3tab + "msg = GeometryMsgsTwist(topic, command, msg)" + self._nl,
             self._3tab
-            + "msg = interface.GeometryMsgsTwist(topic, command, msg)"
+            + "msgJson = self._converter.GeometryMsgsTwistToJson(msg)"
             + self._nl,
             self._2tab + "else:" + self._nl,
             self._3tab + 'raise RuntimeError("incorrect ros message type")' + self._nl,
             self._nl,
-            self._2tab + "msg_json = self._converter.to_json(msg)" + self._nl,
-            self._2tab + "self._redis_wrapper.publish(topic, msg_json)" + self._nl,
+            self._2tab + "self._redis_wrapper.publish(topic, msgJson)" + self._nl,
         ]
 
         f = open(self._filename, "a")
