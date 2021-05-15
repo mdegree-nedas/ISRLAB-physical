@@ -46,6 +46,9 @@ class _Motion:
 
 
 class _MotionCommands:
+    def __init__(self):
+        self.data = "twist"
+
     def go_forward(self, _callback=None):
         if _callback == None:
             raise NotImplementedError("_callback is not implemented")

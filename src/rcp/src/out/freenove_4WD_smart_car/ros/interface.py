@@ -4,9 +4,10 @@
 
 
 class GeometryMsgsTwist:
-    def __init__(self, topic, command, msg):
+    def __init__(self, topic, command, msg_type, msg):
         self.topic = topic
         self.command = command
+        self.msg_type = msg_type
         self.data = self.GeometryMsgsTwistData(msg)
 
     class GeometryMsgsTwistData:

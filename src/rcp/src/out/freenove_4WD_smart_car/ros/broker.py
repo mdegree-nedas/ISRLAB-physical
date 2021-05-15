@@ -30,7 +30,7 @@ class RedisMiddleware:
 
     def send(self, topic, command, msg_type, msg):
         if msg_type is "twist":
-            msg = GeometryMsgsTwist(topic, command, msg)
+            msg = GeometryMsgsTwist(topic, command, msg_type, msg)
             msgJson = self._converter.GeometryMsgsTwistToJson(msg)
         else:
             raise RuntimeError("incorrect ros message type")
@@ -44,6 +44,7 @@ class _Converter:
             {
                 "topic": msg.topic,
                 "command": msg.command,
+                "msg_type": msg.msg_type,
                 "data": {
                     "linear": {
                         "x": msg.data.linear.x,

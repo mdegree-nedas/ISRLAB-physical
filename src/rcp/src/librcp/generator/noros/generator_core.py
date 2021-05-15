@@ -264,7 +264,21 @@ class NoRosCoreGenerator:
     def _gen_core_actuators_inner_class_commands(self, actuator):
         payload = [
             "class _" + actuator.capitalize() + "Commands" + ":" + self._nl,
+            self._tab + "def __init__(self):" + self._nl,
         ]
+
+        for command in self._cfg_dict[self._gen_name_k][self._gen_actuators_k][
+            actuator
+        ]["commands"]:
+            payload.append(
+                self._2tab
+                + 'self.data = "'
+                + self._cfg_dict[self._gen_name_k][self._gen_commands_k][command][
+                    "data"
+                ]
+                + '"'
+                + self._nl
+            )
 
         f = open(self._filename, "a")
         f.writelines(payload)

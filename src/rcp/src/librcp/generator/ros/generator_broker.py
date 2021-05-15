@@ -109,7 +109,7 @@ class RosBrokerGenerator:
         payload = [
             self._tab + "def GeometryMsgsTwistToJson(self, msg):" + self._nl,
             self._2tab
-            + "return json.dumps({'topic': msg.topic, 'command': msg.command, 'data': {'linear': {'x': msg.data.linear.x, 'y': msg.data.linear.y, 'z': msg.data.linear.z}, 'angular': {'x': msg.data.angular.x, 'y': msg.data.angular.y, 'z': msg.data.angular.z}}})"
+            + "return json.dumps({'topic': msg.topic, 'command': msg.command, 'msg_type': msg.msg_type, 'data': {'linear': {'x': msg.data.linear.x, 'y': msg.data.linear.y, 'z': msg.data.linear.z}, 'angular': {'x': msg.data.angular.x, 'y': msg.data.angular.y, 'z': msg.data.angular.z}}})"
             + self._nl,
             self._nl,
         ]
@@ -174,7 +174,9 @@ class RosBrokerGenerator:
         payload = [
             self._tab + "def send(self, topic, command, msg_type, msg):" + self._nl,
             self._2tab + 'if msg_type is "twist":' + self._nl,
-            self._3tab + "msg = GeometryMsgsTwist(topic, command, msg)" + self._nl,
+            self._3tab
+            + "msg = GeometryMsgsTwist(topic, command, msg_type, msg)"
+            + self._nl,
             self._3tab
             + "msgJson = self._converter.GeometryMsgsTwistToJson(msg)"
             + self._nl,

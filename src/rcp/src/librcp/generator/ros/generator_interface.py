@@ -96,9 +96,10 @@ class RosInterfaceGenerator:
     def _gen_interface_twist_wrapper_class(self):
         payload = [
             "class GeometryMsgsTwist:" + self._nl,
-            self._tab + "def __init__(self, topic, command, msg):" + self._nl,
+            self._tab + "def __init__(self, topic, command, msg_type, msg):" + self._nl,
             self._2tab + "self.topic = topic" + self._nl,
             self._2tab + "self.command = command" + self._nl,
+            self._2tab + "self.msg_type = msg_type" + self._nl,
             self._2tab + "self.data = self.GeometryMsgsTwistData(msg)" + self._nl,
             self._nl,
             self._tab + "class GeometryMsgsTwistData:" + self._nl,
