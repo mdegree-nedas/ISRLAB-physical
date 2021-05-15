@@ -4,6 +4,9 @@ import time
 def main():
     i = 0
     rcp = RCP()
+    ### receive from sensor
+    rcp.rm.receive("sensor", handle_sensor_read)
+    ###
     while True:
         time.sleep(1)
         msg = Twist()
@@ -17,6 +20,10 @@ def main():
         rcp.rm.send("topic", "command", msg)
         print("{} : {}".format(i, str(msg)))
 
+### handle sensor data
+def handle_sensor_read(data):
+    print(str(data))
+###
 
 ## INTERFACE
 class _TwistMsg:
@@ -48,6 +55,12 @@ class _RedisWrapper:
 
     def publish(self, topic, msg):
         self.r.publish(topic, msg)
+    
+    ### we can subscribe and listen on thread
+    def subscribe_and_listen(self, topic, callback):
+        self.r.pubsub.subscribe(**{topic: callback})
+        self.r.pubsub.run_in_thread(sleep_time=0.001)
+    ###
 
 class _RedisMiddleware:
     def __init__(self):
@@ -59,6 +72,11 @@ class _RedisMiddleware:
         msg_json = self.cv.to_json(msg)
         self.rw.publish(topic, msg_json)
 
+    ### receive topic data in given callback
+    def receive(self, topic, callback):
+        self.rw.subscribe_and_listen(topic, callback)
+    ###
+        
 
 ## CORE
 class RCP:
