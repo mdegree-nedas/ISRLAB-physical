@@ -22,7 +22,7 @@ def main():
 
 ### handle sensor data
 def handle_sensor_read(data):
-    print(str(data))
+    print('heard: ', data)
 ###
 
 ## INTERFACE
