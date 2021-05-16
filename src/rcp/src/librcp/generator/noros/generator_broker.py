@@ -66,6 +66,8 @@ class NoRosBrokerGenerator:
         self._gen_broker_redis_wrapper_common()
         self._gen_broker_redis_wrapper_class()
 
+        self._gen_broker_redis_middleware_class()
+
         self._finalize()
 
     # ##################################################
@@ -101,7 +103,7 @@ class NoRosBrokerGenerator:
 
     def _gen_broker_redis_wrapper_class(self):
         payload = [
-            "class RedisWrapper:" + self._nl,
+            "class _RedisWrapper:" + self._nl,
             self._tab
             + "def __init__(self, host=SERVER_ADDR, port=SERVER_PORT, db=SERVER_DRDB):"
             + self._nl,
@@ -110,12 +112,32 @@ class NoRosBrokerGenerator:
             + self._nl,
             self._2tab + "self._redis_pubsub = self._redis.pubsub()" + self._nl,
             self._nl,
-            self._tab + "def publish(self, topic, data):" + self._nl,
-            self._2tab + "return self._redis_pubsub.publish(topic, data)" + self._nl,
+            self._tab + "def subscribe(self, actuators_topics):" + self._nl,
+            self._2tab + "self._redis_pubsub.subscribe(**actuators_topics)" + self._nl,
+            self._2tab
+            + "self._redis_pubsub.run_in_thread(sleep_time=0.01, daemon=True)"
+            + self._nl,
             self._nl,
-            self._tab + "def subscribe(self, topic):" + self._nl,
-            self._2tab + "return self._redis_pubsub.subscribe(topic)" + self._nl,
+        ]
+
+        f = open(self._filename, "a")
+        f.writelines(payload)
+        f.close()
+
+    # ##################################################
+    # GEN REDIS MIDDLEWARE
+
+    def _gen_broker_redis_middleware_class(self):
+        payload = [
+            "class RedisMiddleware:" + self._nl,
+            self._tab + "def __init__(self, actuators_topics):" + self._nl,
+            self._2tab + "self._redis_wrapper = _RedisWrapper()" + self._nl,
+            self._2tab + "self._actuators_topics = actuators_topics" + self._nl,
             self._nl,
+            self._tab + "def receive(self):" + self._nl,
+            self._2tab
+            + "self._redis_wrapper.subscribe(self._actuators_topics)"
+            + self._nl,
         ]
 
         f = open(self._filename, "a")

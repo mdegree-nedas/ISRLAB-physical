@@ -33,6 +33,7 @@ class NoRosCoreGenerator:
         self._tab = "    "
         self._2tab = self._tab * 2
         self._3tab = self._tab * 3
+        self._4tab = self._tab * 4
         self._nl = "\n"
 
     def _initialize_core(self):
@@ -91,7 +92,11 @@ class NoRosCoreGenerator:
 
     def _gen_core_imports(self):
         payload = [
-            "from types import FunctionType" + self._nl,
+            "import json" + self._nl,
+            "# from types import FunctionType" + self._nl,
+            "from collections.abc import Callable" + self._nl,
+            "from .broker import RedisMiddleware" + self._nl,
+            "from .template import Template" + self._nl,
             self._nl,
         ]
 
@@ -120,8 +125,25 @@ class NoRosCoreGenerator:
             self._tab + "def __init__(self):" + self._nl,
             self._2tab + "self.sensors = _Sensors()" + self._nl,
             self._2tab + "self.actuators = _Actuators()" + self._nl,
-            self._nl,
+            self._2tab + "self.actuators_topics = {" + self._nl,
         ]
+        for actuator in self._gen_vector_actuators:
+            payload.append(
+                self._3tab
+                + "self.actuators."
+                + actuator
+                + ".topic: self.actuators."
+                + actuator
+                + ".commands.handler,"
+                + self._nl
+            )
+        payload.append(self._2tab + "}" + self._nl)
+        payload.append(
+            self._2tab
+            + "self.broker = RedisMiddleware(self.actuators_topics)"
+            + self._nl
+            + self._nl
+        )
 
         f = open(self._filename, "a")
         f.writelines(payload)
@@ -177,6 +199,7 @@ class NoRosCoreGenerator:
                 )
             else:
                 payload.append(self._2tab + "self." + k + " = " + "None" + self._nl)
+        payload.append(self._2tab + "self.callback = None" + self._nl)
         payload.append(self._nl)
         payload.append(self._tab + "def read(self, _callback=None):" + self._nl)
         payload.append(self._2tab + "if _callback == None:" + self._nl)
@@ -186,7 +209,7 @@ class NoRosCoreGenerator:
             + self._nl
         )
         payload.append(
-            self._2tab + "if not isinstance(_callback, FunctionType):" + self._nl
+            self._2tab + "if not isinstance(_callback, Callable):" + self._nl
         )
         payload.append(
             self._3tab + 'raise RuntimeError("_callback is not callable")' + self._nl
@@ -211,6 +234,7 @@ class NoRosCoreGenerator:
 
     def _gen_core_actuators_class__init__(self):
         payload = [self._tab + "def __init__(self):" + self._nl]
+        payload.append(self._2tab + "self.templates = Template()" + self._nl)
         for actuator in self._gen_vector_actuators:
             payload.append(
                 self._2tab
@@ -218,7 +242,7 @@ class NoRosCoreGenerator:
                 + actuator
                 + " = _"
                 + actuator.capitalize()
-                + "()"
+                + "(self.templates)"
                 + self._nl
             )
         payload.append(self._nl)
@@ -237,7 +261,7 @@ class NoRosCoreGenerator:
         f.close()
 
     def _gen_core_actuators_inner_class_def(self, actuator):
-        payload = [self._tab + "def __init__(self):" + self._nl]
+        payload = [self._tab + "def __init__(self, templates):" + self._nl]
         for k, v in self._cfg_dict[self._gen_name_k][self._gen_actuators_k][
             actuator
         ].items():
@@ -252,7 +276,7 @@ class NoRosCoreGenerator:
                     + k
                     + " = _"
                     + actuator.capitalize()
-                    + "Commands()"
+                    + "Commands(templates)"
                     + self._nl
                 )
         payload.append(self._nl)
@@ -264,7 +288,7 @@ class NoRosCoreGenerator:
     def _gen_core_actuators_inner_class_commands(self, actuator):
         payload = [
             "class _" + actuator.capitalize() + "Commands" + ":" + self._nl,
-            self._tab + "def __init__(self):" + self._nl,
+            self._tab + "def __init__(self, templates):" + self._nl,
         ]
 
         for command in self._cfg_dict[self._gen_name_k][self._gen_actuators_k][
@@ -272,38 +296,77 @@ class NoRosCoreGenerator:
         ]["commands"]:
             payload.append(
                 self._2tab
-                + 'self.data = "'
-                + self._cfg_dict[self._gen_name_k][self._gen_commands_k][command][
-                    "data"
-                ]
-                + '"'
+                + "self."
+                + command
+                + " = self._"
+                + command.capitalize()
+                + "(templates)"
                 + self._nl
             )
+
+        payload.append(self._tab + "def handler(self, msg):" + self._nl)
+        payload.append(self._2tab + 'data = json.loads(msg["data"])' + self._nl)
+        for command in self._cfg_dict[self._gen_name_k][self._gen_actuators_k][
+            actuator
+        ]["commands"]:
+            payload.append(
+                self._2tab
+                + 'if(data["msg_type"] == self.'
+                + command
+                + '.data and data["command"] == self.'
+                + command
+                + ".name):"
+                + self._nl
+            )
+            payload.append(self._3tab + "self." + command + ".run(data)" + self._nl)
 
         f = open(self._filename, "a")
         f.writelines(payload)
         f.close()
 
     def _gen_core_actuators_inner_class_commands_def(self, actuator):
-        for cmd in self._cfg_dict[self._gen_name_k][self._gen_actuators_k][actuator][
-            "commands"
-        ]:
-            payload = [self._tab + "def " + cmd + "(self, _callback=None):" + self._nl]
-            payload.append(self._2tab + "if _callback == None:" + self._nl)
+        for command in self._cfg_dict[self._gen_name_k][self._gen_actuators_k][
+            actuator
+        ]["commands"]:
+            payload = [self._tab + "class _" + command.capitalize() + ":" + self._nl]
+            payload.append(self._2tab + "def __init__(self, templates):" + self._nl)
+            payload.append(self._3tab + "self.name = " + "'" + command + "'" + self._nl)
             payload.append(
                 self._3tab
+                + "self.callback = "
+                + "templates."
+                + actuator
+                + "_"
+                + command
+                + "_callback"
+                + self._nl
+            )
+            payload.append(
+                self._3tab
+                + "self.data = '"
+                + self._cfg_dict[self._gen_name_k][self._gen_commands_k][command][
+                    "data"
+                ]
+                + "'"
+                + self._nl
+            )
+            payload.append(self._nl)
+            payload.append(self._2tab + "def run(self, data):" + self._nl)
+            payload.append(self._3tab + "if self.callback == None:" + self._nl)
+            payload.append(
+                self._4tab
                 + 'raise NotImplementedError("_callback is not implemented")'
                 + self._nl
             )
             payload.append(
-                self._2tab + "if not isinstance(_callback, FunctionType):" + self._nl
+                self._3tab + "if not isinstance(self.callback, Callable):" + self._nl
             )
             payload.append(
-                self._3tab
+                self._4tab
                 + 'raise RuntimeError("_callback is not callable")'
                 + self._nl
             )
-            payload.append(self._2tab + "_callback()" + self._nl)
+            payload.append(self._3tab + "self.callback(data)" + self._nl)
             payload.append(self._nl)
 
             f = open(self._filename, "a")

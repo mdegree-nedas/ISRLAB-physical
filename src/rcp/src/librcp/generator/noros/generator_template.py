@@ -68,6 +68,8 @@ class NoRosTemplateGenerator:
         self._initialize_template()
         self._gen_template_imports()
 
+        self._gen_template_class()
+
         self._gen_template_sensors()
         self._gen_template_actuators()
 
@@ -93,16 +95,27 @@ class NoRosTemplateGenerator:
         os.system("black -q " + self._filename)
 
     # ##################################################
+    # GEN TEMPLATE CLASS
+
+    def _gen_template_class(self):
+        payload = ["class Template:" + self._nl]
+
+        f = open(self._filename, "a")
+        f.writelines(payload)
+        f.close()
+
+    # ##################################################
     # GEN TEMPLATE SENSORS
 
     def _gen_template_sensors(self):
         for sensor in self._gen_vector_sensors:
             payload = [
-                "def " + sensor + "_read_callback():" + self._nl,
+                self._tab + "def " + sensor + "_read_callback(self):" + self._nl,
             ]
             payload.append(
-                self._tab + 'print("' + sensor + ".read" + '.callback")' + self._nl
+                self._2tab + 'print("' + sensor + ".read" + '.callback")' + self._nl
             )
+            payload.append(self._nl)
 
             f = open(self._filename, "a")
             f.writelines(payload)
@@ -117,17 +130,26 @@ class NoRosTemplateGenerator:
                 "commands"
             ]:
                 payload = [
-                    "def " + actuator + "_" + k + "_callback():" + self._nl,
+                    self._tab
+                    + "def "
+                    + actuator
+                    + "_"
+                    + k
+                    + "_callback(self, data):"
+                    + self._nl,
                 ]
                 payload.append(
-                    self._tab
+                    self._2tab
                     + 'print("'
                     + actuator
                     + "."
                     + k
                     + '.callback")'
-                    + self._nl
+                    + self._nl,
                 )
+                payload.append(self._2tab + 'print("implement this method")' + self._nl)
+                payload.append(self._2tab + "print(data)" + self._nl)
+                payload.append(self._nl)
 
                 f = open(self._filename, "a")
                 f.writelines(payload)
