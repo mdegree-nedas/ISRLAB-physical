@@ -6,7 +6,7 @@ from .interface import *
 import redis
 import json
 
-SERVER_ADDR = "0.0.0.0"
+SERVER_ADDR = "redis"
 SERVER_PORT = 6379
 SERVER_DRDB = 0
 
