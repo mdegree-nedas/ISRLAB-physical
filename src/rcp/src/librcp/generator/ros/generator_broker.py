@@ -123,7 +123,7 @@ class RosBrokerGenerator:
 
     def _gen_broker_redis_wrapper_common(self):
         payload = [
-            'SERVER_ADDR = "0.0.0.0"' + self._nl,
+            'SERVER_ADDR = "redis"' + self._nl,
             "SERVER_PORT = 6379" + self._nl,
             "SERVER_DRDB = 0" + self._nl,
         ]
