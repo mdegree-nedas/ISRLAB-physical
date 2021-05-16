@@ -31,6 +31,7 @@ class Template:
         print("or implement another callback, and assign it using:")
         print("    f = Freenove_4wd_smart_car()")
         print("    f.actuators.motion.go_forward.callback = <your-callback>")
+        print(data)
 
     def ultrasound_read(self):
         print("ultrasound_read")

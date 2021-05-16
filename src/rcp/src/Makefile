@@ -31,4 +31,13 @@ build:
 .SILENT: exec
 .PHONY: exec # exec ros/noros examples
 exec:
+	docker-compose -f ./test/docker-compose.yml up -d
 	$(PYTHON_X) $(NOROS_EXAMPLE)
+
+.SILENT: rm
+.PHONY: rm # clean env
+rm:
+	docker-compose -f ./test/docker-compose.yml down
+	docker system prune -f
+	docker volume prune -f
+	docker network prune -f
