@@ -1,5 +1,8 @@
 import redis
-from types import FunctionType
+import json
+
+# from types import FunctionType
+from collections.abc import Callable
 
 
 class RedisWrapper:
@@ -13,29 +16,35 @@ class RedisWrapper:
 
 
 class RedisMiddleware:
-    def __init__(self):
-        self.rw = RedisWrapper()
-        self.h = Handlers()
-        self.actuators_topics = {"motion_topic_ros_to_noros": self.h.motion_handler}
-        self.receive()
+    def __init__(self, actuators_topics):
+        self._redis_wrapper = RedisWrapper()
+        self.actuators_topics = actuators_topics
 
     def receive(self):
-        self.rw.subscribe(self.actuators_topics)
+        self._redis_wrapper.subscribe(self.actuators_topics)
 
 
-class Handlers:
-    def motion_handler(self, msg):
-        data = msg["data"]
-        if data["command"] == "go_forward" and data["msg_type"] == "twist":
-            # template.go_forward()
-            print(data)
+class Template:
+    def go_forward_callback(self, data):
+        print("this is the default callback")
+        print("give to this method an implementation")
+        print("or implement another callback, and assign it using:")
+        print("    f = Freenove_4wd_smart_car()")
+        print("    f.actuators.motion.go_forward.callback = <your-callback>")
+
+    def ultrasound_read(self):
+        print("ultrasound_read")
 
 
 class Freenove_4wd_smart_car:
     def __init__(self):
         self.sensors = _Sensors()
         self.actuators = _Actuators()
-        self.rm = RedisMiddleware()
+
+        self.actuators_topics = {
+            self.actuators.motion.topic: self.actuators.motion.commands.handler
+        }
+        self.broker = RedisMiddleware(self.actuators_topics)
 
 
 class _Sensors:
@@ -50,13 +59,14 @@ class _Ultrasound:
         self.address = "ultrasound_address"
         self.topic = "ultrasound_topic_noros_to_ros"
         self.data = None
+        self.callback = None
 
-    def read(self, _callback=None):
-        if _callback == None:
-            raise NotImplementedError("_callback is not implemented")
-        if not isinstance(_callback, FunctionType):
-            raise RuntimeError("_callback is not callable")
-        _callback()
+    # def read(self, _callback=None):
+    #     if _callback == None:
+    #         raise NotImplementedError("_callback is not implemented")
+    #     if not isinstance(_callback, FunctionType):
+    #         raise RuntimeError("_callback is not callable")
+    #     _callback()
 
 
 class _Actuators:
@@ -73,16 +83,41 @@ class _Motion:
 
 
 class _MotionCommands:
-    def go_forward(self, _callback=None):
-        if _callback == None:
-            raise NotImplementedError("_callback is not implemented")
-        if not isinstance(_callback, FunctionType):
-            raise RuntimeError("_callback is not callable")
-        _callback()
+    def __init__(self):
+        self.go_forward = self._GoForward()
+
+    def handler(self, msg):
+        data = json.loads(msg["data"])
+        if (
+            data["msg_type"] == self.go_forward.data
+            and data["command"] == self.go_forward.name
+        ):
+            self.go_forward.run(data)
+
+    class _GoForward:
+        def __init__(self):
+            self.name = "go_forward"
+            self.templates = Template()
+            self.callback = self.templates.go_forward_callback
+            self.data = "twist"
+
+        def run(self, data):
+            if self.callback == None:
+                raise NotImplementedError("_callback is not implemented")
+            if not isinstance(self.callback, Callable):
+                raise RuntimeError("_callback is not callable")
+            self.callback(data)
+
+
+def print_roba(data):
+    print("callback")
+    print(data)
 
 
 def main():
     f = Freenove_4wd_smart_car()
+    # f.actuators.motion.commands.go_forward.callback = print_roba
+    f.broker.receive()
     input()
 
 
