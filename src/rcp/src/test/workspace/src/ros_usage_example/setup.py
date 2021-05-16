@@ -1,6 +1,6 @@
 from setuptools import setup
 
-package_name = 'prova'
+package_name = 'ros_usage_example'
 
 setup(
     name=package_name,
@@ -20,7 +20,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            "main = prova.main:main"
+            "main = ros_usage_example.main:main"
         ],
     },
 )
