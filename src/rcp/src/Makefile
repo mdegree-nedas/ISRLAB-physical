@@ -26,6 +26,7 @@ build:
 	@$(PYTHON_X) $(RCP_X) $(CONFIG_O)
 	cp -rf $(PREFIX)/$(DESTDIR_T)/ros_usage_example.py $(PREFIX)/$(DESTDIR_T)/$(ROS_EXAMPLE_PKG_PATH)/main.py
 	cp -rf $(PREFIX)/$(DESTDIR_G)/freenove_4WD_smart_car/ros $(PREFIX)/$(DESTDIR_T)/$(ROS_EXAMPLE_PKG_PATH)
+	sudo chown -R ${USER}:${USER} $(PREFIX)/$(DESTDIR_T)/workspace
 
 .SILENT: exec
 .PHONY: exec # exec ros/noros examples
