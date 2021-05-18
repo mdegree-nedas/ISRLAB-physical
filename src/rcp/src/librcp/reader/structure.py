@@ -82,6 +82,10 @@ class Structure:
             assert type(cfg_dict[name_k][actuators_k][actuator]["topic"]) == str
             assert type(cfg_dict[name_k][actuators_k][actuator]["commands"]) == list
 
+        for command in self._cfg_vector_commands:
+            assert type(cfg_dict[name_k][commands_k][command]["data"]) == str
+            assert type(cfg_dict[name_k][commands_k][command]["time"]) == float
+
         return [
             name_k,
             sensors_k,

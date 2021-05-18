@@ -39,7 +39,7 @@ freenove_4WD_smart_car:
   commands:
     go_forward:
       data: 'twist'
-      time: false
+      time: 0.10
     # go_backward:
       # data: false
       # time: false

@@ -185,6 +185,16 @@ class RosCoreGenerator:
                     + ' = "'
                     + command
                     + '"'
+                    + self._nl
+                    + self._4tab
+                    + "self."
+                    + command
+                    + "_time = "
+                    + str(
+                        self._cfg_dict[self._gen_name_k][self._gen_commands_k][command][
+                            "time"
+                        ]
+                    )
                     + self._nl,
                 )
 

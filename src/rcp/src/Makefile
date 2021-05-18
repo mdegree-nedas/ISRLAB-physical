@@ -31,6 +31,8 @@ all: build exec
 .PHONY: build # parse, generate, and update examples
 build:
 	@$(PYTHON_X) $(RCP_X) $(CONFIG_O)
+	# chown
+	sudo chown -R ${USER}:${USER} $(PREFIX)/$(DESTDIR_T)/workspace
 	# copy ros example and library
 	cp -rf $(ROS_EXAMPLE) $(PREFIX)/$(DESTDIR_T)/$(ROS_EXAMPLE_PKG_PATH)/main.py
 	cp -rf $(PREFIX)/$(DESTDIR_G)/freenove_4WD_smart_car/ros $(PREFIX)/$(DESTDIR_T)/$(ROS_EXAMPLE_PKG_PATH)
@@ -39,8 +41,6 @@ build:
 	cp -rf $(NOROS_EXAMPLE) $(PREFIX)/$(DESTDIR_T)/$(NOROS_EXAMPLE_PKG_PATH)
 	cp -rf $(PREFIX)/$(DESTDIR_G)/freenove_4WD_smart_car/noros $(PREFIX)/$(DESTDIR_T)/$(NOROS_EXAMPLE_PKG_PATH)
 	rm -rf $(PREFIX)/$(DESTDIR_T)/$(NOROS_EXAMPLE_PKG_PATH)/noros/__pycache__
-	# chown
-	sudo chown -R ${USER}:${USER} $(PREFIX)/$(DESTDIR_T)/workspace
 
 .SILENT: exec
 .PHONY: exec # exec ros/noros examples

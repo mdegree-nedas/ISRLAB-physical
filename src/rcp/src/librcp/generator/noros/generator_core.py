@@ -350,6 +350,16 @@ class NoRosCoreGenerator:
                 + "'"
                 + self._nl
             )
+            payload.append(
+                self._3tab
+                + "self.time = "
+                + str(
+                    self._cfg_dict[self._gen_name_k][self._gen_commands_k][command][
+                        "time"
+                    ]
+                )
+                + self._nl
+            )
             payload.append(self._nl)
             payload.append(self._2tab + "def run(self, data):" + self._nl)
             payload.append(self._3tab + "if self.callback == None:" + self._nl)

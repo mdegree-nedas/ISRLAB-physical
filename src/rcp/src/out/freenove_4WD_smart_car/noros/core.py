@@ -73,6 +73,7 @@ class _MotionCommands:
             self.name = "go_forward"
             self.callback = templates.motion_go_forward_callback
             self.data = "twist"
+            self.time = 0.1
 
         def run(self, data):
             if self.callback == None:

@@ -24,6 +24,7 @@ class Freenove_4wd_smart_car:
         class __MotionCommands:
             def __init__(self):
                 self.go_forward = "go_forward"
+                self.go_forward_time = 0.1
 
     class __Types:
         def __init__(self):

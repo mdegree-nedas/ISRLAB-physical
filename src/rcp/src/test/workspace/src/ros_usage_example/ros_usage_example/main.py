@@ -9,7 +9,7 @@ from geometry_msgs.msg import Twist
 def main():
     f = Freenove_4wd_smart_car()
     while True:
-        time.sleep(1)
+        time.sleep(f.commands.motion.go_forward_time)
 
         msg = Twist()
         msg.linear.x = random.uniform(0, 1)
