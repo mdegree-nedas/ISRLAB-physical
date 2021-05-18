@@ -3,14 +3,32 @@ import time
 
 from .ros.core import Freenove_4wd_smart_car
 
+import rclpy
+from rclpy.node import Node
+
 from geometry_msgs.msg import Twist
 
 
 def main():
-    f = Freenove_4wd_smart_car()
-    while True:
-        time.sleep(f.commands.motion.go_forward_time)
+    rclpy.init(args=args)
+    freenove = Freenove()
+    rclpy.spin(freenove)
+    freenove.destroy_node()
+    rclpy.shutdown()
 
+
+if __name__ == "__main__":
+    main()
+
+
+class Freenove(Node):
+    def __init__(self, node, timer=TIMER):
+        super().__init__("freenove")
+        self.f = Freenove_4wd_smart_car()
+        self.timer_ = f.commands.motion.go_forward_time
+        self.loop_ = self.create_timer(self.timer_, self.__loop_callback_)
+
+    def __generate_twist_message(self):
         msg = Twist()
         msg.linear.x = random.uniform(0, 1)
         msg.linear.y = random.uniform(0, 1)
@@ -18,9 +36,13 @@ def main():
         msg.angular.x = random.uniform(0, 1)
         msg.angular.y = random.uniform(0, 1)
         msg.angular.z = random.uniform(0, 1)
+        return msg
 
-        f.broker.send(f.topics.motion, f.commands.motion.go_forward, f.types.twist, msg)
-
-
-if __name__ == "__main__":
-    main()
+    def __loop_callback_(self):
+        msg = __generate_twist_message()
+        self.f.broker.send(
+            self.f.topics.motion,
+            self.f.commands.motion.go_forward,
+            self.f.types.twist,
+            msg,
+        )
