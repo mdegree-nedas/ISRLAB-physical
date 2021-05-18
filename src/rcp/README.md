@@ -1,4 +1,11 @@
 ###### RCP - Robot Configuration Parser
+
+https://github.com/aaai-disim-univaq
+```
+Supervised by Professor Giovanni De Gasperis
+Course: Intelligent Systems And Robotics Laboratory
+@Department of Information Engineering, Computer Science and Mathematics, Univaq
+```
 ---
 ##### info
 ```
