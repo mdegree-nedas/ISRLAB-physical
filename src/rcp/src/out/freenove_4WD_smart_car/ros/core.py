@@ -14,7 +14,7 @@ class Freenove_4wd_smart_car:
 
     class __Topics:
         def __init__(self):
-            self.ultrasound = "ultrasound_topic_noros_to_ros"
+            self.linetracker = "linetracker_topic_noros_to_ros"
             self.motion = "motion_topic_ros_to_noros"
 
     class __Commands:

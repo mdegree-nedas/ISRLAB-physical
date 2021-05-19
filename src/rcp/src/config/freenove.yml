@@ -1,11 +1,11 @@
 freenove_4WD_smart_car:
   sensors:
-    ultrasound:
-      id: 'ultrasound_id'
+    linetracker:
+      id: 'linetracker_id'
       type: 'vector'
-      address: 'ultrasound_address'
-      topic: 'ultrasound_topic_noros_to_ros'
-      data: null
+      address: 'linetracker_address'
+      topic: 'linetracker_topic_noros_to_ros'
+      time: 0.50
     # lightsensor:
     #   id: 'lightsensor_id'
     #   type: 'vector'

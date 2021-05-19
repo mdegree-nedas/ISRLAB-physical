@@ -22,24 +22,25 @@ class Freenove_4wd_smart_car:
 
 class _Sensors:
     def __init__(self):
-        self.ultrasound = _Ultrasound()
+        self.linetracker = _Linetracker()
 
 
-class _Ultrasound:
+class _Linetracker:
     def __init__(self):
-        self.id = "ultrasound_id"
+        self.id = "linetracker_id"
         self.type = "vector"
-        self.address = "ultrasound_address"
-        self.topic = "ultrasound_topic_noros_to_ros"
-        self.data = None
+        self.address = "linetracker_address"
+        self.topic = "linetracker_topic_noros_to_ros"
+        self.time = 0.5
         self.callback = None
 
-    def read(self, _callback=None):
-        if _callback == None:
-            raise NotImplementedError("_callback is not implemented")
-        if not isinstance(_callback, Callable):
-            raise RuntimeError("_callback is not callable")
-        _callback()
+    def read(self):
+        if self.callback == None:
+            raise NotImplementedError("self.callback is not implemented")
+        if not isinstance(self.callback, Callable):
+            raise RuntimeError("self.callback is not callable")
+        msg = self.callback()
+        print(msg)
 
 
 class _Actuators:

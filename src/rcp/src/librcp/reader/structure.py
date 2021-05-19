@@ -7,7 +7,7 @@ class Structure:
 
     def _initialize(self):
         self._cfg_default_classes = ["sensors", "actuators", "commands"]
-        self._cfg_default_sensors_fields = ["id", "type", "address", "topic", "data"]
+        self._cfg_default_sensors_fields = ["id", "type", "address", "topic", "time"]
         self._cfg_default_actuators_fields = ["id", "address", "topic", "commands"]
         self._cfg_default_commands_fields = ["data", "time"]
 
@@ -74,7 +74,7 @@ class Structure:
             assert type(cfg_dict[name_k][sensors_k][sensor]["type"]) == str
             assert type(cfg_dict[name_k][sensors_k][sensor]["address"]) == str
             assert type(cfg_dict[name_k][sensors_k][sensor]["topic"]) == str
-            # assert type(cfg_dict[name_k][sensors_k][sensor]["data"]) == str
+            assert type(cfg_dict[name_k][sensors_k][sensor]["time"]) == float
 
         for actuator in self._cfg_vector_actuators:
             assert type(cfg_dict[name_k][actuators_k][actuator]["id"]) == str

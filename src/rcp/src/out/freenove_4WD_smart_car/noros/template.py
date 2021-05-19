@@ -4,8 +4,8 @@
 
 
 class Template:
-    def ultrasound_read_callback(self):
-        print("ultrasound.read.callback")
+    def linetracker_read_callback(self):
+        print("linetracker.read.callback")
 
     def motion_go_forward_callback(self, data):
         print("motion.go_forward.callback")

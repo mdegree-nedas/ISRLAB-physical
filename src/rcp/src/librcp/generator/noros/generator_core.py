@@ -193,28 +193,29 @@ class NoRosCoreGenerator:
         for k, v in self._cfg_dict[self._gen_name_k][self._gen_sensors_k][
             sensor
         ].items():
-            if v is not None:
-                payload.append(
-                    self._2tab + "self." + k + " = " + '"' + v + '"' + self._nl
-                )
+            if type(v) is float:
+                payload.append(self._2tab + "self." + k + " = " + str(v) + self._nl)
             else:
-                payload.append(self._2tab + "self." + k + " = " + "None" + self._nl)
+                payload.append(self._2tab + "self." + k + ' = "' + v + '"' + self._nl)
         payload.append(self._2tab + "self.callback = None" + self._nl)
         payload.append(self._nl)
-        payload.append(self._tab + "def read(self, _callback=None):" + self._nl)
-        payload.append(self._2tab + "if _callback == None:" + self._nl)
+        payload.append(self._tab + "def read(self):" + self._nl)
+        payload.append(self._2tab + "if self.callback == None:" + self._nl)
         payload.append(
             self._3tab
-            + 'raise NotImplementedError("_callback is not implemented")'
+            + 'raise NotImplementedError("self.callback is not implemented")'
             + self._nl
         )
         payload.append(
-            self._2tab + "if not isinstance(_callback, Callable):" + self._nl
+            self._2tab + "if not isinstance(self.callback, Callable):" + self._nl
         )
         payload.append(
-            self._3tab + 'raise RuntimeError("_callback is not callable")' + self._nl
+            self._3tab
+            + 'raise RuntimeError("self.callback is not callable")'
+            + self._nl
         )
-        payload.append(self._2tab + "_callback()" + self._nl)
+        payload.append(self._2tab + "msg = self.callback()" + self._nl)
+        payload.append(self._2tab + "print(msg)" + self._nl)
 
         f = open(self._filename, "a")
         f.writelines(payload)
