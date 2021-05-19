@@ -9,7 +9,7 @@ from rclpy.node import Node
 from geometry_msgs.msg import Twist
 
 
-def main():
+def main(args=None):
     rclpy.init(args=args)
     freenove = Freenove()
     rclpy.spin(freenove)
@@ -22,10 +22,10 @@ if __name__ == "__main__":
 
 
 class Freenove(Node):
-    def __init__(self, node, timer=TIMER):
+    def __init__(self):
         super().__init__("freenove")
         self.f = Freenove_4wd_smart_car()
-        self.timer_ = f.commands.motion.go_forward_time
+        self.timer_ = self.f.commands.motion.go_forward_time
         self.loop_ = self.create_timer(self.timer_, self.__loop_callback_)
 
     def __generate_twist_message(self):
@@ -39,7 +39,7 @@ class Freenove(Node):
         return msg
 
     def __loop_callback_(self):
-        msg = __generate_twist_message()
+        msg = self.__generate_twist_message()
         self.f.broker.send(
             self.f.topics.motion,
             self.f.commands.motion.go_forward,
