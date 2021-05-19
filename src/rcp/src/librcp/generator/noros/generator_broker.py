@@ -76,6 +76,7 @@ class NoRosBrokerGenerator:
     def _gen_broker_imports(self):
         payload = [
             "import redis" + self._nl,
+            "import json" + self._nl,
             self._nl,
         ]
 
@@ -117,6 +118,8 @@ class NoRosBrokerGenerator:
             self._2tab
             + "self._redis_pubsub.run_in_thread(sleep_time=0.01, daemon=True)"
             + self._nl,
+            self._tab + "def publish(self, topic, msg):" + self._nl,
+            self._2tab + "return self._redis.publish(topic, msg)" + self._nl,
             self._nl,
         ]
 
@@ -138,6 +141,12 @@ class NoRosBrokerGenerator:
             self._2tab
             + "self._redis_wrapper.subscribe(self._actuators_topics)"
             + self._nl,
+            self._tab + "def send(self, topic, msg):" + self._nl,
+            self._2tab
+            + "msgJson = json.dumps({'topic': topic,'data': msg})"
+            + self._nl,
+            self._2tab + "self._redis_wrapper.publish(topic, msgJson)" + self._nl,
+            self._nl,
         ]
 
         f = open(self._filename, "a")

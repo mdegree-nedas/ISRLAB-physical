@@ -12,7 +12,9 @@ def main():
     f.sensors.linetracker.callback = read_another_callback
     while True:
         time.sleep(f.sensors.linetracker.time)
-        f.sensors.linetracker.read()
+        msg = f.sensors.linetracker.read()
+        print(msg)
+        f.broker.send(f.sensors.linetracker.topic, msg)
 
 
 if __name__ == "__main__":

@@ -40,7 +40,7 @@ class _Linetracker:
         if not isinstance(self.callback, Callable):
             raise RuntimeError("self.callback is not callable")
         msg = self.callback()
-        print(msg)
+        return msg
 
 
 class _Actuators:

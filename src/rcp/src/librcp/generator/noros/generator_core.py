@@ -215,7 +215,7 @@ class NoRosCoreGenerator:
             + self._nl
         )
         payload.append(self._2tab + "msg = self.callback()" + self._nl)
-        payload.append(self._2tab + "print(msg)" + self._nl)
+        payload.append(self._2tab + "return msg" + self._nl)
 
         f = open(self._filename, "a")
         f.writelines(payload)
