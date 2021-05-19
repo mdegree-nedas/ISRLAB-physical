@@ -71,8 +71,11 @@ sensors_build: build
 .SILENT: sensors_exec
 .PHONY: sensors_exec # (sensors)   exec ros/noros examples
 sensors_exec:
-	# $(PYTHON_X) $(PREFIX)/$(DESTDIR_T)/$(NOROS_EXAMPLE_PKG_PATH)/noros_usage_example.py
 	docker-compose -f ./test/docker-compose.yml up
+
+temprule:
+	sed -i 's/SERVER_ADDR = "0.0.0.0"/SERVER_ADDR = "$(shell docker inspect test_redis_1|grep "IPAddress\": \"*[0-9]"|cut -d: -f2|tr -d ",\" ")"/g' test/host/noros/broker.py
+	$(PYTHON_X) $(PREFIX)/$(DESTDIR_T)/$(NOROS_EXAMPLE_PKG_PATH)/noros_usage_example.py
 
 .PHONY: actuators_build # (actuators) parse, generate, and update examples
 actuators_build: build
