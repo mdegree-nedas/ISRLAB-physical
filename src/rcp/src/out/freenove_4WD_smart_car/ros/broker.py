@@ -16,17 +16,19 @@ class _RedisWrapper:
         self._redis = redis.Redis(host=host, port=port, db=db)
         self._redis_pubsub = self._redis.pubsub()
 
+    def subscribe(self, sensors_topics):
+        self._redis_pubsub.subscribe(**sensors_topics)
+        self._redis_pubsub.run_in_thread(sleep_time=0.01, daemon=True)
+
     def publish(self, topic, msg):
         return self._redis.publish(topic, msg)
 
-    def subscribe(self, topic):
-        return self._redis_pubsub.subscribe(topic)
-
 
 class RedisMiddleware:
-    def __init__(self):
+    def __init__(self, sensors_topics):
         self._redis_wrapper = _RedisWrapper()
         self._converter = _Converter()
+        self._sensors_topics = sensors_topics
 
     def send(self, topic, command, msg_type, msg):
         if msg_type is "twist":
@@ -34,8 +36,10 @@ class RedisMiddleware:
             msgJson = self._converter.GeometryMsgsTwistToJson(msg)
         else:
             raise RuntimeError("incorrect ros message type")
-
         self._redis_wrapper.publish(topic, msgJson)
+
+    def receive(self):
+        self._redis_wrapper.subscribe(self._sensors_topics)
 
 
 class _Converter:

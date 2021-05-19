@@ -34,6 +34,7 @@ class RosCoreGenerator:
         self._2tab = self._tab * 2
         self._3tab = self._tab * 3
         self._4tab = self._tab * 4
+        self._5tab = self._tab * 5
         self._nl = "\n"
 
     def _initialize_core(self):
@@ -71,6 +72,7 @@ class RosCoreGenerator:
         self._gen_core_main_class()
         self._gen_core_main_class__init__()
         self._gen_core_main_class__initialize_topics()
+        self._gen_core_main_class__initialize_sensors()
         self._gen_core_main_class__initialize_commands()
         self._gen_core_main_class__initialize_msg_types()
 
@@ -82,6 +84,10 @@ class RosCoreGenerator:
     def _gen_core_imports(self):
         payload = [
             "from .broker import RedisMiddleware",
+            self._nl,
+            "from collections.abc import Callable",
+            self._nl,
+            "import json",
             self._nl,
         ]
 
@@ -108,12 +114,89 @@ class RosCoreGenerator:
     def _gen_core_main_class__init__(self):
         payload = [
             self._tab + "def __init__(self):" + self._nl,
-            self._2tab + "self.broker = RedisMiddleware()" + self._nl,
             self._2tab + "self.topics = self.__Topics()" + self._nl,
             self._2tab + "self.commands = self.__Commands()" + self._nl,
+            self._2tab + "self.sensors = self.__Sensors()" + self._nl,
             self._2tab + "self.types = self.__Types()" + self._nl,
-            self._nl,
         ]
+        payload.append(self._2tab + "self.sensors_topics = {" + self._nl)
+        for sensor in self._gen_vector_sensors:
+            payload.append(
+                self._3tab
+                + "self.sensors."
+                + sensor
+                + ".topic: self.sensors."
+                + sensor
+                + ".handler,"
+                + self._nl
+            )
+        payload.append(self._2tab + "}" + self._nl)
+        payload.append(
+            self._2tab + "self.broker = RedisMiddleware(self.sensors_topics)" + self._nl
+        )
+
+        f = open(self._filename, "a")
+        f.writelines(payload)
+        f.close()
+
+    def _gen_core_main_class__initialize_sensors(self):
+        payload = [
+            self._tab + "class __Sensors:" + self._nl,
+            self._2tab + "def __init__(self):" + self._nl,
+        ]
+        for sensor in self._gen_vector_sensors:
+            payload.append(
+                self._3tab
+                + "self."
+                + sensor
+                + " = self.__"
+                + sensor.capitalize()
+                + "()"
+                + self._nl
+            )
+        payload.append(self._nl)
+        for sensor in self._gen_vector_sensors:
+            payload.append(
+                self._2tab + "class __" + sensor.capitalize() + "():" + self._nl
+            )
+            payload.append(self._3tab + "def __init__(self):" + self._nl)
+            payload.append(
+                self._4tab
+                + 'self.topic = "'
+                + self._cfg_dict[self._gen_name_k][self._gen_sensors_k][sensor]["topic"]
+                + '"'
+                + self._nl
+            )
+            payload.append(
+                self._4tab
+                + "self.time = "
+                + str(
+                    self._cfg_dict[self._gen_name_k][self._gen_sensors_k][sensor][
+                        "time"
+                    ]
+                )
+                + self._nl,
+            )
+            payload.append(
+                self._4tab + "self.callback = None" + self._nl,
+            )
+            payload.append(self._3tab + "def handler(self, msg):" + self._nl)
+            payload.append(self._4tab + 'data = json.loads(msg["data"])' + self._nl)
+            payload.append(self._4tab + "if self.callback == None:" + self._nl)
+            payload.append(
+                self._5tab
+                + 'raise NotImplementedError("self.callback is not implemented")'
+                + self._nl
+            )
+            payload.append(
+                self._4tab + "if not isinstance(self.callback, Callable):" + self._nl
+            )
+            payload.append(
+                self._5tab
+                + 'raise RuntimeError("_callback is not callable")'
+                + self._nl
+            )
+            payload.append(self._4tab + "self.callback(data)" + self._nl)
 
         f = open(self._filename, "a")
         f.writelines(payload)

@@ -13,6 +13,7 @@ def main():
     while True:
         time.sleep(f.sensors.linetracker.time)
         msg = f.sensors.linetracker.read()
+        print(msg)
         f.broker.send(f.sensors.linetracker.topic, msg)
 
 

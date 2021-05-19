@@ -5,7 +5,7 @@
 import redis
 import json
 
-SERVER_ADDR = "0.0.0.0"
+SERVER_ADDR = "172.27.0.3"
 SERVER_PORT = 6379
 SERVER_DRDB = 0
 

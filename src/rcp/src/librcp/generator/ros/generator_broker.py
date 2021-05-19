@@ -143,11 +143,14 @@ class RosBrokerGenerator:
             + self._nl,
             self._2tab + "self._redis_pubsub = self._redis.pubsub()" + self._nl,
             self._nl,
+            self._tab + "def subscribe(self, sensors_topics):" + self._nl,
+            self._2tab + "self._redis_pubsub.subscribe(**sensors_topics)" + self._nl,
+            self._2tab
+            + "self._redis_pubsub.run_in_thread(sleep_time=0.01, daemon=True)"
+            + self._nl,
+            self._nl,
             self._tab + "def publish(self, topic, msg):" + self._nl,
             self._2tab + "return self._redis.publish(topic, msg)" + self._nl,
-            self._nl,
-            self._tab + "def subscribe(self, topic):" + self._nl,
-            self._2tab + "return self._redis_pubsub.subscribe(topic)" + self._nl,
             self._nl,
         ]
 
@@ -161,9 +164,10 @@ class RosBrokerGenerator:
     def _gen_broker_redis_middleware_class(self):
         payload = [
             "class RedisMiddleware:" + self._nl,
-            self._tab + "def __init__(self):" + self._nl,
+            self._tab + "def __init__(self, sensors_topics):" + self._nl,
             self._2tab + "self._redis_wrapper = _RedisWrapper()" + self._nl,
             self._2tab + "self._converter = _Converter()" + self._nl,
+            self._2tab + "self._sensors_topics = sensors_topics" + self._nl,
         ]
 
         f = open(self._filename, "a")
@@ -182,8 +186,11 @@ class RosBrokerGenerator:
             + self._nl,
             self._2tab + "else:" + self._nl,
             self._3tab + 'raise RuntimeError("incorrect ros message type")' + self._nl,
-            self._nl,
             self._2tab + "self._redis_wrapper.publish(topic, msgJson)" + self._nl,
+            self._tab + "def receive(self):" + self._nl,
+            self._2tab
+            + "self._redis_wrapper.subscribe(self._sensors_topics)"
+            + self._nl,
         ]
 
         f = open(self._filename, "a")
