@@ -41,8 +41,8 @@ clean:
 	$(DOCKER_X) network prune -f
 
 
-.PHONY: sensors_build # (sensors)   parse, generate, and update examples
-sensors_build: build clean
+.PHONY: build_sensors # (sensors)   parse, generate, and update examples
+build_sensors: build clean
 	# ros2
 	cp -rf $(PREFIX)$(DESTDIR_TEST)$(DESTDIR_TEST_EXAMPLES)sensors/ros_usage_example.py $(PREFIX)$(DESTDIR_TEST)$(DESTDIR_TEST_ENV_ROS)main.py
 	cp -rf $(PREFIX)$(DESTDIR_OUT)freenove_4WD_smart_car/ros $(PREFIX)$(DESTDIR_TEST)$(DESTDIR_TEST_ENV_ROS)
@@ -52,8 +52,8 @@ sensors_build: build clean
 	cp -rf $(PREFIX)$(DESTDIR_OUT)freenove_4WD_smart_car/noros $(PREFIX)$(DESTDIR_TEST)$(DESTDIR_TEST_ENV_NOROS)
 	rm -rf $(PREFIX)$(DESTDIR_TEST)$(DESTDIR_TEST_ENV_NOROS)noros/__pycache__
 
-.PHONY: actuators_build # (actuators) parse, generate, and update examples
-actuators_build: build
+.PHONY: build_actuators # (actuators) parse, generate, and update examples
+build_actuators: build
 	# ros2
 	cp -rf $(PREFIX)$(DESTDIR_TEST)$(DESTDIR_TEST_EXAMPLES)actuators/ros_usage_example.py $(PREFIX)$(DESTDIR_TEST)$(DESTDIR_TEST_ENV_ROS)main.py
 	cp -rf $(PREFIX)$(DESTDIR_OUT)freenove_4WD_smart_car/ros $(PREFIX)$(DESTDIR_TEST)$(DESTDIR_TEST_ENV_ROS)
@@ -63,18 +63,18 @@ actuators_build: build
 	cp -rf $(PREFIX)$(DESTDIR_OUT)freenove_4WD_smart_car/noros $(PREFIX)$(DESTDIR_TEST)$(DESTDIR_TEST_ENV_NOROS)
 	rm -rf $(PREFIX)$(DESTDIR_TEST)$(DESTDIR_TEST_ENV_NOROS)noros/__pycache__
 
-.SILENT: x_remote_ros
-.PHONY: x_remote_ros # (exec)      exec ros example in distributed env
-x_remote_ros:
+.SILENT: exec_remote_ros
+.PHONY: exec_remote_ros # (exec)      exec ros example in distributed env
+exec_remote_ros:
 	$(DOCKER_COMPOSE_X) -f ./test/docker-compose.yml up
 
-.SILENT: x_remote_rpi
-.PHONY: x_remote_rpi # (exec)      exec noros example in distributed env
-x_remote_rpi:
+.SILENT: exec_remote_rpi
+.PHONY: exec_remote_rpi # (exec)      exec noros example in distributed env
+exec_remote_rpi:
 	$(PYTHON_X) $(PREFIX)$(DESTDIR_TEST)$(DESTDIR_TEST_ENV_NOROS)noros_usage_example.py
 
-.SILENT: x_local
-.PHONY: x_local # (exec)      exec ros/noros examples in local env
-x_local:
+.SILENT: exec_local
+.PHONY: exec_local # (exec)      exec ros/noros examples in local env
+exec_local:
 	$(DOCKER_COMPOSE_X) -f ./test/docker-compose.yml up
 	$(PYTHON_X) $(PREFIX)$(DESTDIR_TEST)$(DESTDIR_TEST_ENV_NOROS)noros_usage_example.py
