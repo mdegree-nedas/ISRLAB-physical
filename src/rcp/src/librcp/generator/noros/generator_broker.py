@@ -93,7 +93,10 @@ class NoRosBrokerGenerator:
 
     def _gen_broker_redis_wrapper_common(self):
         payload = [
-            'SERVER_ADDR = "' + self._cfg_dict[self._gen_name_k]["message_broker_ip"] + '"' + self._nl,
+            'SERVER_ADDR = "'
+            + self._cfg_dict[self._gen_name_k]["message_broker_ip"]
+            + '"'
+            + self._nl,
             "SERVER_PORT = 6379" + self._nl,
             "SERVER_DRDB = 0" + self._nl,
         ]
