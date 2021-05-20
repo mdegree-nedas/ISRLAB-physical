@@ -1,4 +1,5 @@
 from itertools import chain
+import re
 
 
 class Structure:
@@ -6,7 +7,7 @@ class Structure:
         self._initialize()
 
     def _initialize(self):
-        self._cfg_default_classes = ["sensors", "actuators", "commands"]
+        self._cfg_default_classes = ["message_broker_ip", "sensors", "actuators", "commands"]
         self._cfg_default_sensors_fields = ["id", "type", "address", "topic", "time"]
         self._cfg_default_actuators_fields = ["id", "address", "topic", "commands"]
         self._cfg_default_commands_fields = ["data", "time"]
@@ -28,10 +29,15 @@ class Structure:
         name_k = self._cfg_vector_name[0]
 
         self._cfg_vector_classes = list(cfg_dict[name_k].keys())
-        assert len(self._cfg_vector_classes) == 3
+        assert len(self._cfg_vector_classes) == 4
         assert self._cfg_vector_classes == self._cfg_default_classes
 
-        sensors_k, actuators_k, commands_k = self._cfg_vector_classes[:]
+        mb_ip_k, sensors_k, actuators_k, commands_k = self._cfg_vector_classes[:]
+
+        assert type(mb_ip_k) == str
+
+        ip_regex = re.compile(r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$")
+        assert ip_regex.fullmatch(cfg_dict[name_k][mb_ip_k]) != None
 
         self._cfg_vector_sensors = list(cfg_dict[name_k][sensors_k].keys())
 
