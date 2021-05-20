@@ -10,4 +10,3 @@ WORKSPACE_DIR ?= intelligent_systems_and_robotics_lab-physical-proj_
 PUBLISHER_IMG ?= $(WORKSPACE_DIR)publisher
 
 HOST_REDIS_MIRROR_PATH ?= src/raspberry/host_redis_mirror
-RCP_PATH ?= src/rcp

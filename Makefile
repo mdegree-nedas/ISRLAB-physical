@@ -5,22 +5,19 @@ include config.mk
 .DEFAULT_GOAL := help
 
 h_build: h_init h_install
-r_build: r_init r_install
 v_build: v_rm v_init
 v_rm: v_down v_clean
 
 .PHONY: host # ----- (combo)[host] build
 .PHONY: ros # ----- (combo)[ros] build
-.PHONY: rcp # ----- (combo)[rcp] build
 
 host: h_build
 ros: v_build
-rcp: r_build
 
-.PHONY: all # ----- (combo)[host,ros,rcp] build all
-.PHONY: rm # ----- (combo)[host,ros,rcp] rm all
+.PHONY: all # ----- (combo)[host,ros] build all
+.PHONY: rm # ----- (combo)[host,ros] rm all
 
-all: host ros rcp
+all: host ros
 rm: h_clean r_clean v_rm
 
 # --------------------------------------------------
@@ -102,33 +99,3 @@ h_clean:
 	-rm -f $(HOST_REDIS_MIRROR_PATH)/pyvenv.cfg
 	-rm -rf $(HOST_REDIS_MIRROR_PATH)/__pycache__
 	-rm -rf $(HOST_REDIS_MIRROR_PATH)/share
-
-# --------------------------------------------------
-# RCP RULES
-
-.PHONY: r_init # [rcp] initialize python venv
-r_init:
-	$(PYTHON_X) -m venv $(RCP_PATH)
-
-.ONESHELL:
-.PHONY: r_install # [rcp] source python venv and install dependencies
-r_install:
-	. $(RCP_PATH)/bin/activate
-	$(PYTHON_X) -m $(PIP_X) install --upgrade $(PIP_X)
-	$(PIP_X) install -r $(RCP_PATH)/requirements.txt
-
-.ONESHELL:
-.PHONY: r_resolve # [rcp] source python venv and update requirements.txt
-r_resolve:
-	. $(RCP_PATH)/bin/activate
-	$(PIP_X) freeze > $(RCP_PATH)/requirements.txt
-
-.PHONY: r_clean # [rcp] clean python venv
-r_clean:
-	-rm -rf $(RCP_PATH)/bin
-	-rm -rf $(RCP_PATH)/include
-	-rm -rf $(RCP_PATH)/lib
-	-rm -rf $(RCP_PATH)/lib64
-	-rm -f $(RCP_PATH)/pyvenv.cfg
-	-rm -rf $(RCP_PATH)/__pycache__
-	-rm -rf $(RCP_PATH)/share
